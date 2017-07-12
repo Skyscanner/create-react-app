@@ -17,10 +17,12 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
 const InterpolateHtmlPlugin = require('react-dev-utils/InterpolateHtmlPlugin');
 const WatchMissingNodeModulesPlugin = require('react-dev-utils/WatchMissingNodeModulesPlugin');
-const eslintFormatter = require('react-dev-utils/eslintFormatter');
+// const eslintFormatter = require('react-dev-utils/eslintFormatter');
 const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin');
+const sassFunctions = require('bpk-mixins/sass-functions');
 const getClientEnvironment = require('./env');
 const paths = require('./paths');
+const pkgJson = require(paths.appPackageJson);
 
 // Webpack uses `publicPath` to determine where the app is being served from.
 // In development, we always serve from the root. This makes config easier.
@@ -31,6 +33,32 @@ const publicPath = '/';
 const publicUrl = '';
 // Get environment variables to inject into our app.
 const env = getClientEnvironment(publicUrl);
+
+const bpkReactScriptsConfig = pkgJson['backpack-react-scripts'] || {};
+
+const customModuleRegexes = bpkReactScriptsConfig.babelIncludePrefixes
+  ? bpkReactScriptsConfig.babelIncludePrefixes.map(
+      prefix => new RegExp(`node_modules[\\\/]${prefix}`)
+    )
+  : [];
+
+const optInCssModules = bpkReactScriptsConfig.cssModules === false;
+
+const postcssOptions = {
+  ident: 'postcss', // https://webpack.js.org/guides/migrating/#complex-options
+  plugins: () => [
+    require('postcss-flexbugs-fixes'),
+    autoprefixer({
+      browsers: [
+        '>1%',
+        'last 4 versions',
+        'Firefox ESR',
+        'not ie < 9', // React doesn't support IE8 anyway
+      ],
+      flexbox: 'no-2009',
+    }),
+  ],
+};
 
 // This is the development configuration.
 // It is focused on developer experience and fast rebuilds.
@@ -129,26 +157,26 @@ module.exports = {
 
       // First, run the linter.
       // It's important to do this before Babel processes the JS.
-      {
-        test: /\.(js|jsx)$/,
-        enforce: 'pre',
-        use: [
-          {
-            options: {
-              formatter: eslintFormatter,
-              // @remove-on-eject-begin
-              baseConfig: {
-                extends: [require.resolve('eslint-config-react-app')],
-              },
-              ignore: false,
-              useEslintrc: false,
-              // @remove-on-eject-end
-            },
-            loader: require.resolve('eslint-loader'),
-          },
-        ],
-        include: paths.appSrc,
-      },
+      // {
+      //   test: /\.(js|jsx)$/,
+      //   enforce: 'pre',
+      //   use: [
+      //     {
+      //       options: {
+      //         formatter: eslintFormatter,
+      //         // @remove-on-eject-begin
+      //         baseConfig: {
+      //           extends: [require.resolve('eslint-config-react-app')],
+      //         },
+      //         ignore: false,
+      //         useEslintrc: false,
+      //         // @remove-on-eject-end
+      //       },
+      //       loader: require.resolve('eslint-loader'),
+      //     },
+      //   ],
+      //   include: paths.appSrc,
+      // },
       // ** ADDING/UPDATING LOADERS **
       // The "file" loader handles all assets unless explicitly excluded.
       // The `exclude` list *must* be updated with every change to loader extensions.
@@ -162,7 +190,7 @@ module.exports = {
         exclude: [
           /\.html$/,
           /\.(js|jsx)$/,
-          /\.css$/,
+          /\.(scss|css)$/,
           /\.json$/,
           /\.bmp$/,
           /\.gif$/,
@@ -188,7 +216,11 @@ module.exports = {
       // Process JS with Babel.
       {
         test: /\.(js|jsx)$/,
-        include: paths.appSrc,
+        include: [
+          paths.appSrc,
+          paths.backpackModulesRegex,
+          ...customModuleRegexes,
+        ],
         loader: require.resolve('babel-loader'),
         options: {
           // @remove-on-eject-begin
@@ -207,6 +239,67 @@ module.exports = {
       // In production, we use a plugin to extract that CSS to a file, but
       // in development "style" loader enables hot editing of CSS.
       {
+        test: /\.scss$/,
+        exclude: optInCssModules
+          ? [/\.module\.scss$/, paths.backpackModulesRegex]
+          : [],
+        use: [
+          require.resolve('style-loader'),
+          {
+            loader: require.resolve('css-loader'),
+            options: {
+              importLoaders: 1,
+              modules: !optInCssModules,
+              localIdentName: '[local]-[hash:base64:5]',
+            },
+          },
+          {
+            loader: require.resolve('postcss-loader'),
+            options: postcssOptions,
+          },
+          {
+            loader: require.resolve('sass-loader'),
+            options: {
+              functions: sassFunctions,
+            },
+          },
+        ],
+      },
+      {
+        test: {
+          and: [
+            () => optInCssModules,
+            {
+              or: [
+                /\.module\.scss$/,
+                { and: [paths.backpackModulesRegex, /\.scss$/] },
+              ],
+            },
+          ],
+        },
+        use: [
+          require.resolve('style-loader'),
+          {
+            loader: require.resolve('css-loader'),
+            options: {
+              importLoaders: 1,
+              modules: true,
+              localIdentName: '[local]-[hash:base64:5]',
+            },
+          },
+          {
+            loader: require.resolve('postcss-loader'),
+            options: postcssOptions,
+          },
+          {
+            loader: require.resolve('sass-loader'),
+            options: {
+              functions: sassFunctions,
+            },
+          },
+        ],
+      },
+      {
         test: /\.css$/,
         use: [
           require.resolve('style-loader'),
@@ -218,23 +311,7 @@ module.exports = {
           },
           {
             loader: require.resolve('postcss-loader'),
-            options: {
-              // Necessary for external CSS imports to work
-              // https://github.com/facebookincubator/create-react-app/issues/2677
-              ident: 'postcss',
-              plugins: () => [
-                require('postcss-flexbugs-fixes'),
-                autoprefixer({
-                  browsers: [
-                    '>1%',
-                    'last 4 versions',
-                    'Firefox ESR',
-                    'not ie < 9', // React doesn't support IE8 anyway
-                  ],
-                  flexbox: 'no-2009',
-                }),
-              ],
-            },
+            options: postcssOptions,
           },
         ],
       },
