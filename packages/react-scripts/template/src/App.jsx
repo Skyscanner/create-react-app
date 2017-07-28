@@ -12,7 +12,7 @@ const App = () => (
       <BpkGridContainer>
         <BpkGridRow>
           <BpkGridColumn width={12}>
-            <BpkText tagName="h1" textStyle="xxl" className={STYLES.App__text}>Welcome to React + Backpack</BpkText>
+            <BpkText tagName="h1" textStyle="xxl" className={STYLES.App__heading}>Welcome to React + Backpack</BpkText>
           </BpkGridColumn>
         </BpkGridRow>
       </BpkGridContainer>

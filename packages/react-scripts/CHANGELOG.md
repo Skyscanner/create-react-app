@@ -2,7 +2,9 @@
 
 ## UNRELEASED
 
-_Nothing yet..._
+- Deprecated BpkHeading and BpkParagraph
+- Added BpkText component
+- Updated all other Backpack dependencies to latest versions
 
 ## 4.0.1 - 2017-07-27
 ### Fixed
