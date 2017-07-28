@@ -1,8 +1,7 @@
 import React from 'react';
 import { BpkCode } from 'bpk-component-code';
 import BpkButton from 'bpk-component-button';
-import BpkHeading from 'bpk-component-heading';
-import BpkParagraph from 'bpk-component-paragraph';
+import BpkText from 'bpk-component-text';
 import { BpkGridContainer, BpkGridRow, BpkGridColumn } from 'bpk-component-grid';
 
 import STYLES from './App.scss';
@@ -13,7 +12,7 @@ const App = () => (
       <BpkGridContainer>
         <BpkGridRow>
           <BpkGridColumn width={12}>
-            <BpkHeading level="h1">Welcome to React + Backpack</BpkHeading>
+            <BpkText tagName="h1" textStyle="xxl" className={STYLES.App__text}>Welcome to React + Backpack</BpkText>
           </BpkGridColumn>
         </BpkGridRow>
       </BpkGridContainer>
@@ -22,9 +21,9 @@ const App = () => (
       <BpkGridContainer>
         <BpkGridRow>
           <BpkGridColumn width={12}>
-            <BpkParagraph>
+            <BpkText tagName="p" className={STYLES.App__text}>
               To get started, edit <BpkCode>src/App.jsx</BpkCode> and save to reload.
-            </BpkParagraph>
+            </BpkText>
             <BpkButton onClick={() => alert('It works!')}>Click me</BpkButton>
           </BpkGridColumn>
         </BpkGridRow>

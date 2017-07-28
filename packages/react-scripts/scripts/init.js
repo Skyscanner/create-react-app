@@ -143,8 +143,7 @@ module.exports = function(
     'bpk-component-button',
     'bpk-component-code',
     'bpk-component-grid',
-    'bpk-component-heading',
-    'bpk-component-paragraph',
+    'bpk-component-text',
     'bpk-mixins',
     'bpk-stylesheets'
   );
