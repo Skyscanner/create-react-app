@@ -4,6 +4,9 @@
 
 _Nothing yet_
 
+### Fixed
+- Production and SSR builds will now use `optimize-css-assets-webpack-plugin` with `cssnano` to optimize output CSS. This gets rid of duplication of global CSS constructs such as keyframes.
+
 ## 4.0.1 - 2017-07-28
 ### Fixed
 - Deprecated BpkHeading and BpkParagraph
