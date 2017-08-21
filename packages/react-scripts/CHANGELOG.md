@@ -1,7 +1,10 @@
 # `backpack-react-scripts` Change Log
 
 ## UNRELEASED
-_Nothing Yet_
+
+### Fixed
+- Upgraded sass-loader to 6.0.6 which fixes peer dependency warning with webpack (caused shrinkwraps to fail)
+- Upgraded bpk-mixins to 16.3.1
 
 ## 4.0.5 - 2017-08-17
 
