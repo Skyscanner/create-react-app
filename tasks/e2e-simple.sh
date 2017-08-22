@@ -299,6 +299,9 @@ verify_env_url
 # Test reliance on webpack internals
 verify_module_scope
 
+# Test ability to shrinkwrap
+npm shrinkwrap --save-dev
+
 # ******************************************************************************
 # Finally, let's check that everything still works after ejecting.
 # ******************************************************************************
