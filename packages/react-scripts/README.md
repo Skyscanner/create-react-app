@@ -21,21 +21,6 @@ Out of the box, `create-react-app` doesn't work well with Backpack components be
 Sass stylesheets or uncompiled dependencies in the `node_modules` folder. We also want to be able to tailor
 the template to use Backpack out-the-box.
 
-## Keeping this fork updated
-
-We wish to keep this fork updated with the upstream repo to benefit from the ongoing open source development
-of `create-react-app`. Please follow the steps outlined in [this guide](https://robots.thoughtbot.com/keeping-a-github-fork-updated) 
-to keep this fork up to date e.g:
-
-```sh
-git remote add upstream git@github.com:facebookincubator/create-react-app.git
-git fetch upstream
-git rebase upstream/master
-```
-
-You will most likely run into merge conflicts during this process. If so, please take care to fix them whilst
-preserving the custom functionality we have added in the fork.
-
 ## What is different in our fork?
 
 This is a high-level overview of the changed we made to this fork.
@@ -94,5 +79,32 @@ If you decide to opt out, Sass files will not be treated as CSS Modules by defau
 
 ## Releasing a new version of `backpack-react-scripts`
 
-Please refer to the [CONTRIBUTING.md](./../../CONTRIBUTING.md) in the root of this repo. All other packages have had 
-their `package.json`'s modified to be private therefore they won't be published to the npm registry.
+1. To publish a new version of `backpack-react-scripts`, run the following command:
+    
+    ```
+    npm run publish -- --scope backpack-react-scripts
+    ```
+
+1. You will be prompted to select a new semver version (MAJOR, MINOR, PATCH). Use the [CHANGELOG.md](./CHANGELOG.md) to decide on the nature of the changes since the last release.
+    * If you want to be extra careful, you can publish a prerelease by running this instead:
+    
+    ```
+    npm run publish -- --scope backpack-react-scripts --canary
+    ```
+
+1. Update the [CHANGELOG.md](./CHANGELOG.md) with the new version, taking care to follow the format of previous releases.
+
+## Keeping this fork updated
+
+We wish to keep this fork updated with the upstream repo to benefit from the ongoing open source development
+of `create-react-app`. Please follow the steps outlined in [this guide](https://robots.thoughtbot.com/keeping-a-github-fork-updated) 
+to keep this fork up to date e.g:
+
+```sh
+git remote add upstream git@github.com:facebookincubator/create-react-app.git
+git fetch upstream
+git rebase upstream/master
+```
+
+You will most likely run into merge conflicts during this process. If so, please take care to fix them whilst
+preserving the custom functionality we have added in the fork.
