@@ -2,6 +2,10 @@
 
 ## UNRELEASED
 
+_Nothing yet..._
+
+## 4.0.6 - 2017-08-22
+
 ### Fixed
 - Upgraded sass-loader to 6.0.6 which fixes peer dependency warning with webpack (caused shrinkwraps to fail)
 - Upgraded bpk-mixins to 16.3.1
