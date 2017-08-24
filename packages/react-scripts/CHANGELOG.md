@@ -2,7 +2,8 @@
 
 ## UNRELEASED
 
-_Nothing yet..._
+### Fixed
+- Fixed issue with classnames not being hashed correctly for projects using CSS Modules
 
 ## 4.0.6 - 2017-08-22
 
