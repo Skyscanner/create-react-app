@@ -69,9 +69,6 @@ export default { App };
 
 Run `npm run build` as you would to build a production browser bundle - you should notice an additional `ssr.js` file in
 the output directory:
-
-```sh
-npm install --save npm-run-all
 ```
 my-app/
   build/

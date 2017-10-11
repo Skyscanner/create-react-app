@@ -2,6 +2,10 @@
 
 ## UNRELEASED
 
+### Fixed
+- Rebased onto `upstream/master` (b2c0b3f74b47f0f85e3f17f7d3249b7e536cda05)
+- Locked `react` & `react-dom` versions to `^15.0.0` for now
+
 ## 4.0.7 - 2017-08-24
 
 ### Fixed
