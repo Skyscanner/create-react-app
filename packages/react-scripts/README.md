@@ -97,14 +97,16 @@ If you decide to opt out, Sass files will not be treated as CSS Modules by defau
 ## Keeping this fork updated
 
 We wish to keep this fork updated with the upstream repo to benefit from the ongoing open source development
-of `create-react-app`. Please follow the steps outlined in [this guide](https://robots.thoughtbot.com/keeping-a-github-fork-updated) 
-to keep this fork up to date e.g:
+of `create-react-app`. To keep this fork up to date, please follow the steps below (based on 
+[this guide](https://robots.thoughtbot.com/keeping-a-github-fork-updated)):
 
 ```sh
 git remote add upstream git@github.com:facebookincubator/create-react-app.git
 git fetch upstream
-git rebase upstream/master
+git rebase <commit>
 ```
+
+> **Note:** `<commit>` should be the SHA-1 of the latest upstream release - _not_ just the latest i.e. `upstream/master`
 
 You will most likely run into merge conflicts during this process. If so, please take care to fix them whilst
 preserving the custom functionality we have added in the fork.

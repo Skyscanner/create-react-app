@@ -104,7 +104,7 @@ module.exports = function(
     command = 'npm';
     args = ['install', '--save-dev', verbose && '--verbose'].filter(e => e);
   }
-  args.push('react', 'react-dom');
+  args.push('react@^15', 'react-dom@^15');
 
   // Install additional template dependencies, if present
   const templateDependenciesPath = path.join(
@@ -147,7 +147,7 @@ module.exports = function(
   );
   const bpkProc = spawn.sync(command, bpkArgs, { stdio: 'inherit' });
   if (bpkProc.status !== 0) {
-    console.error('`' + command + ' ' + bpkArgs.join(' ') + '` failed');
+    console.error(`\`${command} ${bpkArgs.join(' ')}\` failed`);
     return;
   }
 
@@ -156,18 +156,13 @@ module.exports = function(
   delete require.cache[require.resolve(appPackagePath)];
   const newAppPackage = require(appPackagePath);
 
-  // BPK: If React is installed in `dependencies`, move it to `devDependencies`
+  // BPK: If React is installed in `dependencies`, get rid of it
   if (isReactInstalled(newAppPackage)) {
-    const devDependencies = Object.assign({}, newAppPackage.devDependencies);
     const dependencies = Object.assign({}, newAppPackage.dependencies);
-
-    devDependencies.react = dependencies.react;
-    devDependencies['react-dom'] = dependencies['react-dom'];
 
     delete dependencies.react;
     delete dependencies['react-dom'];
 
-    newAppPackage.devDependencies = devDependencies;
     newAppPackage.dependencies = dependencies;
 
     fs.writeFileSync(
