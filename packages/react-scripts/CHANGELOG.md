@@ -2,7 +2,8 @@
 
 ## UNRELEASED
 
-_Nothing yet..._
+### Fixed
+- Upgraded `eslint-config-skyscanner` to `3.0.0`.
 
 ## 4.0.8 - 2017-10-12
 
