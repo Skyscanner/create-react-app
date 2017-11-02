@@ -2,7 +2,8 @@
 
 ## UNRELEASED
 
-_Nothing yet!_
+### Fixed
+- Prevent lodash imports from leaking on to the global scope, see https://github.com/webpack/webpack/issues/3017#issuecomment-285954512
 
 ## 5.0.0 - 2017-10-30
 
