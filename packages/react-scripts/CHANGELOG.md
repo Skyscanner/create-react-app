@@ -2,7 +2,8 @@
 
 ## UNRELEASED
 
-_Nothing yet..._
+### Fixed
+- Scope the disabling of AMD for `lodash` only
 
 ## 5.0.1 - 2017-11-02
 ### Fixed
