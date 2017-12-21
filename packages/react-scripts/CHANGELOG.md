@@ -2,7 +2,9 @@
 
 ## UNRELEASED
 
-_Nothing yet..._
+### Fixed
+- Rebased onto `upstream/master` v1.0.17 (4b55193f0ad479f26b0f5e153bb4b152a1ee03e7)
+- Peer dependency issues with `postcss-less` & `sugarss`
 
 ## 5.0.2 - 2017-11-03
 ### Fixed
