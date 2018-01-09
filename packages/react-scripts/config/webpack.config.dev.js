@@ -202,6 +202,7 @@ module.exports = {
             include: [
               paths.appSrc,
               paths.backpackModulesRegex,
+              paths.saddlebagModulesRegex,
               ...customModuleRegexes,
             ],
             loader: require.resolve('babel-loader'),

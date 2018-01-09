@@ -47,7 +47,8 @@ function getServedPath(appPackageJson) {
 }
 
 // Regex to match backpack node modules
-var backpackModulesRegex = /node_modules[\\/]bpk-/;
+const backpackModulesRegex = /node_modules[\\/]bpk-/;
+const saddlebagModulesRegex = /node_modules[\\/]saddlebag-/;
 
 // config after eject: we're in ./config/
 module.exports = {
@@ -64,6 +65,7 @@ module.exports = {
   publicUrl: getPublicUrl(resolveApp('package.json')),
   servedPath: getServedPath(resolveApp('package.json')),
   backpackModulesRegex: backpackModulesRegex,
+  saddlebagModulesRegex: saddlebagModulesRegex,
   appSsrJs: resolveApp('src/ssr.js'),
 };
 
@@ -89,6 +91,7 @@ module.exports = {
   ownPath: resolveOwn('.'),
   ownNodeModules: resolveOwn('node_modules'), // This is empty on npm 3
   backpackModulesRegex: backpackModulesRegex,
+  saddlebagModulesRegex: saddlebagModulesRegex,
   appSsrJs: resolveApp('src/ssr.js'),
 };
 
@@ -121,6 +124,7 @@ if (
     ownPath: resolveOwn('.'),
     ownNodeModules: resolveOwn('node_modules'),
     backpackModulesRegex: backpackModulesRegex,
+    saddlebagModulesRegex: saddlebagModulesRegex,
     appSsrJs: resolveOwn('template/src/ssr.js'),
   };
 }
