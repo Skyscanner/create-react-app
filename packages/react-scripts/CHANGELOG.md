@@ -4,6 +4,10 @@
 
 _Nothing yet..._
 
+## 5.0.4 - 2018-01-11
+### Added
+- Added `saddlebag-` prefix for saddlebag modules to be compiled by backpack-react-scripts
+
 ## 5.0.3 - 2017-12-21
 ### Fixed
 - Rebased onto `upstream/master` v1.0.17 (4b55193f0ad479f26b0f5e153bb4b152a1ee03e7)
