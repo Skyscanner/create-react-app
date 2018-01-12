@@ -4,6 +4,10 @@
 
 _Nothing yet..._
 
+## 5.0.5 - 2018-01-12
+### Fixed
+- `saddlebag` modules are now compiled by jest for tests
+
 ## 5.0.4 - 2018-01-11
 ### Added
 - Added `saddlebag-` prefix for saddlebag modules to be compiled by backpack-react-scripts

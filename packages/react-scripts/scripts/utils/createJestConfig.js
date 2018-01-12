@@ -16,6 +16,7 @@ const bpkReactScriptsConfig = pkgJson['backpack-react-scripts'] || {};
 
 const includePrefixes = bpkReactScriptsConfig.babelIncludePrefixes || [];
 includePrefixes.unshift('bpk-');
+includePrefixes.unshift('saddlebag-');
 
 const transformIgnorePattern = `[/\\\\]node_modules[/\\\\](?!${includePrefixes.join(
   '|'
