@@ -2,7 +2,8 @@
 
 ## UNRELEASED
 
-_Nothing yet..._
+### Fixed
+- CSS Modules hashing now uses `package.json` name field as a salt
 
 ## 5.0.5 - 2018-01-15
 ### Fixed

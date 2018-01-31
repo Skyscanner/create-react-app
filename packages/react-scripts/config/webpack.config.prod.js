@@ -22,6 +22,7 @@ const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin');
 const sassFunctions = require('bpk-mixins/sass-functions');
 const paths = require('./paths');
 const getClientEnvironment = require('./env');
+const getLocalIdent = require('./getLocalIdent');
 const pkgJson = require(paths.appPackageJson);
 
 // Webpack uses `publicPath` to determine where the app is being served from.
@@ -258,6 +259,7 @@ module.exports = {
                         sourceMap: shouldUseSourceMap,
                         modules: !optInCssModules,
                         localIdentName: '[local]-[hash:base64:5]',
+                        getLocalIdent: getLocalIdent,
                       },
                     },
                     {
@@ -307,6 +309,7 @@ module.exports = {
                         sourceMap: shouldUseSourceMap,
                         modules: true,
                         localIdentName: '[local]-[hash:base64:5]',
+                        getLocalIdent: getLocalIdent,
                       },
                     },
                     {
@@ -419,7 +422,7 @@ module.exports = {
       },
       mangle: {
         safari10: true,
-      },        
+      },
       output: {
         comments: false,
         // Turned on because emoji and regex is not minified properly using default

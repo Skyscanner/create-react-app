@@ -19,6 +19,7 @@ const WatchMissingNodeModulesPlugin = require('react-dev-utils/WatchMissingNodeM
 const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin');
 const sassFunctions = require('bpk-mixins/sass-functions');
 const getClientEnvironment = require('./env');
+const getLocalIdent = require('./getLocalIdent');
 const paths = require('./paths');
 const pkgJson = require(paths.appPackageJson);
 
@@ -235,6 +236,7 @@ module.exports = {
                   importLoaders: 1,
                   modules: !optInCssModules,
                   localIdentName: '[local]-[hash:base64:5]',
+                  getLocalIdent: getLocalIdent,
                 },
               },
               {
@@ -269,6 +271,7 @@ module.exports = {
                   importLoaders: 1,
                   modules: true,
                   localIdentName: '[local]-[hash:base64:5]',
+                  getLocalIdent: getLocalIdent,
                 },
               },
               {
