@@ -20,6 +20,7 @@ const SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin');
 // const eslintFormatter = require('react-dev-utils/eslintFormatter');
 const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin');
 const sassFunctions = require('bpk-mixins/sass-functions');
+const camelCase = require('lodash/camelCase');
 const paths = require('./paths');
 const getClientEnvironment = require('./env');
 const getLocalIdent = require('./getLocalIdent');
@@ -98,6 +99,7 @@ module.exports = {
   // In production, we only want to load the polyfills and the app code.
   entry: [require.resolve('./polyfills'), paths.appIndexJs],
   output: {
+    jsonpFunction: camelCase(pkgJson.name + 'JsonpCallback'),
     // The build folder.
     path: paths.appBuild,
     // Generated JS file names (with nested folders).

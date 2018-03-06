@@ -2,7 +2,8 @@
 
 ## UNRELEASED
 
-_Nothing yet..._
+### Fixed
+- Use `package.json` name field as value for `output.jsonpFunction`, this is important for when multiple webpack runtimes from different compilation are used on the same page
 
 ## 5.0.6 - 2018-01-31
 ### Fixed

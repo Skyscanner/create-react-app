@@ -18,6 +18,7 @@ const WatchMissingNodeModulesPlugin = require('react-dev-utils/WatchMissingNodeM
 // const eslintFormatter = require('react-dev-utils/eslintFormatter');
 const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin');
 const sassFunctions = require('bpk-mixins/sass-functions');
+const camelCase = require('lodash/camelCase');
 const getClientEnvironment = require('./env');
 const getLocalIdent = require('./getLocalIdent');
 const paths = require('./paths');
@@ -92,6 +93,7 @@ module.exports = {
     // changing JS code would still trigger a refresh.
   ],
   output: {
+    jsonpFunction: camelCase(pkgJson.name + 'JsonpCallback'),
     // Add /* filename */ comments to generated require()s in the output.
     pathinfo: true,
     // This does not produce a real file. It's just the virtual path that is
