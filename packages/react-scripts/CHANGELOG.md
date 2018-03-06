@@ -2,7 +2,8 @@
 
 ## UNRELEASED
 
-_Nothing yet..._
+### Fixed
+- Disabling AMD parsing for all modules
 
 ## 5.0.7 - 2018-03-06
 ### Fixed
