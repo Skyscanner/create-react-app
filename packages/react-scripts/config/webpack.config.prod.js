@@ -188,7 +188,6 @@ module.exports = {
       //   include: paths.appSrc,
       // },
       {
-        test: /(^|\/)lodash(\/|\.|$)/,
         parser: {
           amd: false,
         },
