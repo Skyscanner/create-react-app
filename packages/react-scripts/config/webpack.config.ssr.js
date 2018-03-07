@@ -189,7 +189,11 @@ module.exports = {
       //   include: paths.appSrc,
       // },
       {
-        test: /(^|\/)lodash(\/|\.|$)/,
+        test: new RegExp(
+          `(^|/)(${(bpkReactScriptsConfig.amdExcludes || [])
+            .concat('lodash')
+            .join('|')})(/|.|$)`
+        ),
         parser: {
           amd: false,
         },

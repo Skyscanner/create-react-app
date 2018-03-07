@@ -152,6 +152,31 @@ The above example assumes that the module you want to compile is named with the 
 with the name `some-module`. All entries in this array act as prefixes. It is used by all webpack configurations
 as well as the Jest configuration — if you want to avoid compiling a dependency in tests, you should mock it.
 
+## Disabling AMD parsing for certain modules
+
+If you need to disable AMD module support for whatever reason, you can add the following to your `package.json`:
+
+```json
+{
+  ...
+  "backpack-react-scripts": {
+    "amdExcludes": [
+      "globalize"
+    ]
+  }
+}
+```
+
+The above example disables AMD support for the `globalize` dependency and overcomes issues such as:
+
+```sh
+Failed to compile.
+./node_modules/globalize/dist/globalize.js
+Module not found: Can't resolve 'cldr' in './node_modules/globalize/dist'
+```
+
+> **Note:** `lodash` is disabled by default.
+
 ## CSS Modules
 
 All Sass files are by default treated as [CSS Modules](https://github.com/css-modules/css-modules). You can opt out of this behaviour using the following config option:

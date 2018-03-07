@@ -2,7 +2,16 @@
 
 ## UNRELEASED
 
-_Nothing yet..._
+### Added
+- New `amdExcludes` config in `package.json`. You can now disable AMD parsing for specific modules like so:
+
+```json
+  "backpack-react-scripts": {
+    "amdExcludes": [
+      "globalize"
+    ]
+  }
+```
 
 ## 5.0.7 - 2018-03-06
 ### Fixed
