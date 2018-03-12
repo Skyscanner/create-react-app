@@ -1,8 +1,7 @@
 # `backpack-react-scripts` Change Log
 
 ## UNRELEASED
-
-_Nothing yet..._
+- Allow CORS requests to dev-server.
 
 ## 5.0.8 - 2018-03-07
 ### Fixed
