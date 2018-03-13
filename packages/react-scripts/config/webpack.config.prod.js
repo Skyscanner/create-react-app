@@ -68,6 +68,7 @@ const customModuleRegexes = bpkReactScriptsConfig.babelIncludePrefixes
   : [];
 
 const optInCssModules = bpkReactScriptsConfig.cssModules === false;
+const crossOriginLoading = bpkReactScriptsConfig.crossOriginLoading || false;
 
 const postcssOptions = {
   // Necessary for external CSS imports to work
@@ -107,6 +108,7 @@ module.exports = {
     // We don't currently advertise code splitting but Webpack supports it.
     filename: 'static/js/[name].[chunkhash:8].js',
     chunkFilename: 'static/js/[name].[chunkhash:8].chunk.js',
+    crossOriginLoading,
     // We inferred the "public path" (such as / or /my-project) from homepage.
     publicPath: publicPath,
     // Point sourcemap entries to original disk location (format as URL on Windows)

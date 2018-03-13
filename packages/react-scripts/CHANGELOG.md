@@ -2,7 +2,7 @@
 
 ## UNRELEASED
 
-_Nothing yet..._
+- Added option for configuring crossorigin loading of dynamic chunks.
 
 ## 5.0.8 - 2018-03-07
 ### Fixed
