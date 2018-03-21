@@ -2,6 +2,15 @@
 
 ## UNRELEASED
 
+### Fixed
+- New `disablePolyfills` config in `package.json`. You can opt out of including polyfills from the output bundle like so:
+
+```json
+  "backpack-react-scripts": {
+    "disablePolyfills": true
+  }
+```
+
 ## 5.0.9 - 2018-03-14
 ### Fixed
 - New `crossOriginLoading` config in `package.json`. You can configure cross-origin loading of dynamic chunks:
