@@ -9,12 +9,6 @@ cache:
   - node_modules
   - packages/create-react-app/node_modules
   - packages/react-scripts/node_modules
-# This causes builds for merges and direct pushes to master.
-# Other branches are pull requests and build are triggered via the
-# pull request hook
-# branches:
-#   only:
-#     - master
 install: true
 script:
  - 'if [ $TEST_SUITE = "simple" ]; then tasks/e2e-simple.sh; fi'

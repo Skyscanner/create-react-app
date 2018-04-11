@@ -124,52 +124,19 @@ module.exports = function(
   // Install react and react-dom for backward compatibility with old CRA cli
   // which doesn't install react and react-dom along with react-scripts
   // or template is presetend (via --internal-testing-template)
-  if (!isReactInstalled(appPackage) || template) {
-    console.log(`Installing react and react-dom using ${command}...`);
-    console.log();
-
-    const proc = spawn.sync(command, args, { stdio: 'inherit' });
-    if (proc.status !== 0) {
-      console.error(`\`${command} ${args.join(' ')}\` failed`);
-      return;
-    }
-  }
-
-  // BPK: Install additional backpack components
-  const bpkArgs = args.slice();
-  bpkArgs.push(
-    'bpk-component-button',
-    'bpk-component-code',
-    'bpk-component-grid',
-    'bpk-component-text',
-    'bpk-mixins',
-    'bpk-stylesheets'
+  // if (!isReactInstalled(appPackage) || template) {
+  // console.log(`Installing react and react-dom using ${command}...`);
+  console.log(
+    `Installing ${chalk.cyan('Backpack')} dependencies using ${command}...`
   );
-  const bpkProc = spawn.sync(command, bpkArgs, { stdio: 'inherit' });
-  if (bpkProc.status !== 0) {
-    console.error(`\`${command} ${bpkArgs.join(' ')}\` failed`);
+  console.log();
+
+  const proc = spawn.sync(command, args, { stdio: 'inherit' });
+  if (proc.status !== 0) {
+    console.error(`\`${command} ${args.join(' ')}\` failed`);
     return;
   }
-
-  // BPK: Re-read package.json as dependencies have been added
-  const appPackagePath = path.join(appPath, 'package.json');
-  delete require.cache[require.resolve(appPackagePath)];
-  const newAppPackage = require(appPackagePath);
-
-  // BPK: If React is installed in `dependencies`, get rid of it
-  if (isReactInstalled(newAppPackage)) {
-    const dependencies = Object.assign({}, newAppPackage.dependencies);
-
-    delete dependencies.react;
-    delete dependencies['react-dom'];
-
-    newAppPackage.dependencies = dependencies;
-
-    fs.writeFileSync(
-      path.join(appPath, 'package.json'),
-      JSON.stringify(newAppPackage, null, 2)
-    );
-  }
+  // }
 
   // Display the most elegant way to cd.
   // This needs to handle an undefined originalDirectory for
@@ -228,11 +195,11 @@ module.exports = function(
   console.log('Happy hacking!');
 };
 
-function isReactInstalled(appPackage) {
-  const dependencies = appPackage.dependencies || {};
+// function isReactInstalled(appPackage) {
+//   const dependencies = appPackage.dependencies || {};
 
-  return (
-    typeof dependencies.react !== 'undefined' &&
-    typeof dependencies['react-dom'] !== 'undefined'
-  );
-}
+//   return (
+//     typeof dependencies.react !== 'undefined' &&
+//     typeof dependencies['react-dom'] !== 'undefined'
+//   );
+// }

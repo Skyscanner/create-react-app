@@ -1,5 +1,10 @@
 # `backpack-react-scripts` Change Log
 
+## 5.1.1 - 2018-04-11
+### Fixed
+- `backpack-react-scripts` listed inside of `devDependencies` instead of `dependencies`
+- `registerServiceWorker.js` no longer appears in project output
+
 ## 5.1.0 - 2018-04-10
 ### Added
 - Rebased onto `upstream/master` v1.1.4 (dfbc71ce2ae07547a8544cce14a1a23fac99e071)

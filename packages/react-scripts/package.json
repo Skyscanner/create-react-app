@@ -68,11 +68,11 @@
     "whatwg-fetch": "2.0.3"
   },
   "devDependencies": {
-    "bpk-component-button": "^1.6.78",
-    "bpk-component-code": "^1.0.37",
-    "bpk-component-grid": "^1.1.44",
-    "bpk-component-text": "^1.0.35",
-    "bpk-stylesheets": "^3.2.81",
+    "bpk-component-button": "^2.0.14",
+    "bpk-component-code": "^1.0.56",
+    "bpk-component-grid": "^1.1.63",
+    "bpk-component-text": "^1.0.54",
+    "bpk-stylesheets": "^3.2.100",
     "react": "^15.6.2",
     "react-dom": "^15.6.2"
   },
