@@ -97,16 +97,41 @@ If you decide to opt out, Sass files will not be treated as CSS Modules by defau
 ## Keeping this fork updated
 
 We wish to keep this fork updated with the upstream repo to benefit from the ongoing open source development
-of `create-react-app`. To keep this fork up to date, please follow the steps below (based on 
-[this guide](https://robots.thoughtbot.com/keeping-a-github-fork-updated)):
+of `create-react-app`. To keep this fork up to date, please follow the steps below:
 
-```sh
-git remote add upstream git@github.com:facebookincubator/create-react-app.git
-git fetch upstream
-git rebase <commit>
-```
+1. Ensure `master` is in sync with `upstream/master`:
 
-> **Note:** `<commit>` should be the SHA-1 of the latest upstream release - _not_ just the latest i.e. `upstream/master`
+    ```sh
+    git checkout master
+    git remote add upstream git@github.com:facebook/create-react-app.git
+    git fetch upstream
+    git reset --hard upstream/master
+    git push --force-with-lease
+    ```
 
-You will most likely run into merge conflicts during this process. If so, please take care to fix them whilst
-preserving the custom functionality we have added in the fork.
+1. Rebase `fork` on top of a **tagged release** on `master`:
+
+    ```sh
+    git checkout fork
+    git rebase <commit>
+    ```
+
+    > **Note:** `<commit>` should be the SHA-1 of the latest upstream release - _not_ just the latest i.e. `upstream/master`
+
+1. Pair with someone else to fix any conflicts and cross examine changes in upstream with changes in our fork. 
+
+    > This is the most time consuming part. Take care to make sure you are not regressing any functionality that we have added in our fork.
+
+1. Re-name your local, rebased `fork` branch to something else and push it to origin. This will ensure it runs through CI and you can verify your changes.
+
+    ```sh
+    git branch -m <branch>
+    git push origin <branch>
+    ```
+
+1. Finally, when we are confident that the rebase has been successful, re-name your branch back to `fork` and push it to origin:
+
+    ```sh
+    git branch -m fork
+    git push --force-with-lease
+    ```
