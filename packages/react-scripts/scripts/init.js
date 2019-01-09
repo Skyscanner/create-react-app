@@ -145,9 +145,9 @@ module.exports = function(
   }
 
   // Setup the eslint config
-  appPackage.eslintConfig = {
-    extends: 'react-app',
-  };
+  // appPackage.eslintConfig = {
+  //   extends: 'react-app',
+  // };
 
   // Setup the browsers list
   appPackage.browserslist = defaultBrowsers;
@@ -216,11 +216,11 @@ module.exports = function(
   if (useYarn) {
     command = 'yarnpkg';
     remove = 'remove';
-    args = ['add'];
+    args = ['add', `--dev`];
   } else {
     command = 'npm';
     remove = 'uninstall';
-    args = ['install', '--save', verbose && '--verbose'].filter(e => e);
+    args = ['install', '--save-dev', verbose && '--verbose'].filter(e => e);
   }
 
   // Install additional template dependencies, if present
@@ -240,16 +240,21 @@ module.exports = function(
   }
 
   // Install template dependencies, and react and react-dom if missing.
-  if ((!isReactInstalled(appPackage) || templateName) && args.length > 1) {
-    console.log();
-    console.log(`Installing template dependencies using ${command}...`);
+  // if ((!isReactInstalled(appPackage) || templateName) && args.length > 1) {
+  //   console.log();
+  //   console.log(`Installing template dependencies using ${command}...`);
 
-    const proc = spawn.sync(command, args, { stdio: 'inherit' });
-    if (proc.status !== 0) {
-      console.error(`\`${command} ${args.join(' ')}\` failed`);
-      return;
-    }
+  console.log(
+    `Installing ${chalk.cyan('Backpack')} dependencies using ${command}...`
+  );
+  console.log();
+
+  const proc = spawn.sync(command, args, { stdio: 'inherit' });
+  if (proc.status !== 0) {
+    console.error(`\`${command} ${args.join(' ')}\` failed`);
+    return;
   }
+  // }
 
   if (args.find(arg => arg.includes('typescript'))) {
     console.log();
@@ -327,11 +332,11 @@ module.exports = function(
   console.log('Happy hacking!');
 };
 
-function isReactInstalled(appPackage) {
-  const dependencies = appPackage.dependencies || {};
+// function isReactInstalled(appPackage) {
+//   const dependencies = appPackage.dependencies || {};
 
-  return (
-    typeof dependencies.react !== 'undefined' &&
-    typeof dependencies['react-dom'] !== 'undefined'
-  );
-}
+//   return (
+//     typeof dependencies.react !== 'undefined' &&
+//     typeof dependencies['react-dom'] !== 'undefined'
+//   );
+// }

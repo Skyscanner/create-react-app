@@ -294,40 +294,13 @@ function createApp(
     }
   }
 
-  if (useTypeScript) {
-    console.log(
-      chalk.yellow(
-        'The --typescript option has been deprecated and will be removed in a future release.'
-      )
-    );
-    console.log(
-      chalk.yellow(
-        `In future, please use ${chalk.cyan('--template typescript')}.`
-      )
-    );
-    console.log();
-    if (!template) {
-      template = 'typescript';
-    }
-  }
-
-  if (useYarn) {
-    let yarnUsesDefaultRegistry = true;
-    try {
-      yarnUsesDefaultRegistry =
-        execSync('yarnpkg config get registry')
-          .toString()
-          .trim() === 'https://registry.yarnpkg.com';
-    } catch (e) {
-      // ignore
-    }
-    if (yarnUsesDefaultRegistry) {
-      fs.copySync(
-        require.resolve('./yarn.lock.cached'),
-        path.join(root, 'yarn.lock')
-      );
-    }
-  }
+  // Prevent the cached yarn.lock from being copied over as it fails out build
+  // if (useYarn) {
+  //   fs.copySync(
+  //     require.resolve('./yarn.lock.cached'),
+  //     path.join(root, 'yarn.lock')
+  //   );
+  // }
 
   run(
     root,
