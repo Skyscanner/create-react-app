@@ -5,10 +5,10 @@ node_js:
   - 8
   - 10
   - node
-cache:
-  yarn: true
-  directories:
-    - .npm
+# cache:
+#   yarn: true
+#   directories:
+#     - .npm
 before_install:
   - curl -o- -L https://yarnpkg.com/install.sh | bash -s
   - export PATH="$HOME/.yarn/bin:$PATH"
@@ -25,7 +25,7 @@ env:
     - TEST_SUITE=simple
     - TEST_SUITE=installs
     - TEST_SUITE=kitchensink
-    - TEST_SUITE=kitchensink-eject
+    # - TEST_SUITE=kitchensink-eject
     - TEST_SUITE=behavior
 matrix:
   include:

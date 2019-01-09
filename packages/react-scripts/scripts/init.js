@@ -98,13 +98,18 @@ module.exports = function(
     start: 'react-scripts start',
     build: 'react-scripts build',
     test: 'react-scripts test',
+    'lint:scss': "stylelint 'src/**/*.scss' --syntax scss",
+    'lint:scss:fix': "stylefmt --recursive 'src/**/*.scss'",
+    'lint:js': 'eslint . --ignore-path .gitignore --ext .js,.jsx',
+    'lint:js:fix': 'npm run lint:js -- --fix',
+    lint: 'npm run lint:js && npm run lint:scss',
     eject: 'react-scripts eject',
   };
 
   // Setup the eslint config
-  appPackage.eslintConfig = {
-    extends: 'react-app',
-  };
+  // appPackage.eslintConfig = {
+  //   extends: 'react-app',
+  // };
 
   // Setup the browsers list
   appPackage.browserslist = defaultBrowsers;
@@ -159,12 +164,12 @@ module.exports = function(
 
   if (useYarn) {
     command = 'yarnpkg';
-    args = ['add'];
+    args = ['add', `--dev`];
   } else {
     command = 'npm';
-    args = ['install', '--save', verbose && '--verbose'].filter(e => e);
+    args = ['install', '--save-dev', verbose && '--verbose'].filter(e => e);
   }
-  args.push('react', 'react-dom');
+  args.push('react@16.4.2', 'react-dom@16.4.2');
 
   // Install additional template dependencies, if present
   const templateDependenciesPath = path.join(
@@ -184,16 +189,21 @@ module.exports = function(
   // Install react and react-dom for backward compatibility with old CRA cli
   // which doesn't install react and react-dom along with react-scripts
   // or template is presetend (via --internal-testing-template)
-  if (!isReactInstalled(appPackage) || template) {
-    console.log(`Installing react and react-dom using ${command}...`);
-    console.log();
+  // if (!isReactInstalled(appPackage) || template) {
+  //   console.log(`Installing react and react-dom using ${command}...`);
+  //   console.log();
 
-    const proc = spawn.sync(command, args, { stdio: 'inherit' });
-    if (proc.status !== 0) {
-      console.error(`\`${command} ${args.join(' ')}\` failed`);
-      return;
-    }
+  console.log(
+    `Installing ${chalk.cyan('Backpack')} dependencies using ${command}...`
+  );
+  console.log();
+
+  const proc = spawn.sync(command, args, { stdio: 'inherit' });
+  if (proc.status !== 0) {
+    console.error(`\`${command} ${args.join(' ')}\` failed`);
+    return;
   }
+  // }
 
   if (useTypeScript) {
     verifyTypeScriptSetup();
@@ -232,6 +242,9 @@ module.exports = function(
   console.log(chalk.cyan(`  ${displayedCommand} test`));
   console.log('    Starts the test runner.');
   console.log();
+  console.log(chalk.cyan(`  ${displayedCommand} lint`));
+  console.log('    Lints all JavaScript & SCSS.');
+  console.log();
   console.log(
     chalk.cyan(`  ${displayedCommand} ${useYarn ? '' : 'run '}eject`)
   );
@@ -258,11 +271,11 @@ module.exports = function(
   console.log('Happy hacking!');
 };
 
-function isReactInstalled(appPackage) {
-  const dependencies = appPackage.dependencies || {};
+// function isReactInstalled(appPackage) {
+//   const dependencies = appPackage.dependencies || {};
 
-  return (
-    typeof dependencies.react !== 'undefined' &&
-    typeof dependencies['react-dom'] !== 'undefined'
-  );
-}
+//   return (
+//     typeof dependencies.react !== 'undefined' &&
+//     typeof dependencies['react-dom'] !== 'undefined'
+//   );
+// }
