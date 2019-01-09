@@ -38,7 +38,7 @@ Now when you run `npm run build`, every `'react'` / `'react-dom'` import is repl
 
 ## Server Side Rendering (SSR)
 
-Most of the time you wont need server side rendering, however if you need to generate your app's HTML on the server and send the markup down on the initial request to improve perceived page load or to allow search engines to crawl your pages for SEO purposes, then create a file named `ssr.js` in your app's root folder:
+Most of the time you wont need server-side rendering, however if you need to generate your app's HTML on the server and send the markup down on the initial request to improve perceived page load or to allow search engines to crawl your pages for SEO purposes, then create a file named `ssr.js` in your app's root folder:
 
 ```
 my-app/
@@ -48,7 +48,7 @@ my-app/
     ssr.js    // <-- create this file
 ```
 
-Inside `ssr.js`, export the components that you wish to expose for server side rendering - the file contents should look something like this:
+Inside `ssr.js`, export the components that you wish to expose for server-side rendering - the file contents should look something like this:
 
 ```js
 import App from './App';
@@ -99,7 +99,7 @@ module.exports = router;
 
 If you call `ReactDOM.render()` on a node that already has this server-rendered markup (`<div id="root">` in the example above), React will preserve it and only attach event handlers, allowing you to have a very performant first-load experience.
 
-**Note:** Your external module imports (anything you import from `node_modules/` i.e. `import React from 'react';`) are bundled into the `ssr.js` output file. If you want to exclude any external modules from the output file for performance / code sharing reasons (i.e. if it's beign required elsewhere and is already in memory) you can do so by adding the following to your `package.json`:
+**Note:** Your external module imports (anything you import from `node_modules/` i.e. `import React from 'react';`) are bundled into the `ssr.js` output file. If you want to exclude any external modules from the output file for performance / code sharing reasons (i.e. if it's being required elsewhere and is already in memory) you can do so by adding the following to your `package.json`:
 
 ```json
 {
@@ -129,7 +129,7 @@ By default, modules imported from your app's `node_modules` directory will get c
 }
 ```
 
-The above example assumes that the module you want to compile is named with the prefix `my-module-prefix-` and a module with the name `some-module`. All entries in this array act as prefixes. It is used by all webpack configurations as well as the Jest configuration — if you want to avoid compiling a dependency in tests, you should mock it.
+The above example assumes that the module you want to compile is named with the prefix `my-module-prefix-` and a module with the name `some-module`. All entries in this array act as prefixes. It is used by all Webpack configurations as well as the Jest configuration — if you want to avoid compiling a dependency in tests, you should mock it.
 
 ## Disabling AMD parsing for certain modules
 
