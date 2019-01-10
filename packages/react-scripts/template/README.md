@@ -16,7 +16,6 @@
 - `npm start`: Runs the app in development mode. Open [http://localhost:3000/](http://localhost:3000/) to view it in the browser. The page will reload if you make edits. You will see the build errors in the console.
 - `npm test`: Runs the test watcher in an interactive mode. By default, runs tests related to files changes since the last commit.
 - `npm run build`: Builds the app for production to the build folder. It correctly bundles React in production mode and optimizes the build for the best performance. The build is minified and the filenames include the hashes. Your app is ready to be deployed!
-- `npm run lint`: Lints all javascript using [`eslint-config-skyscanner`](https://www.npmjs.com/package/eslint-config-skyscanner).
 
 ## Excluding React / ReactDOM from the output bundle
 
@@ -196,7 +195,7 @@ The [Backpack team](mailto:backpack@skyscanner.net) provide ongoing maintenance 
 
 If you're finding the need to customise the configuration of `backpack-react-scripts`, then please get in touch with the [Backpack team](mailto:backpack@skyscanner.net) - we are open to contributions.
 
-If this is unsuitable, then you can always run `npm run eject` which copies all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. Commands like `npm start` and `npm run build` will still work, but they will point to the copied scripts so you can tweak them. At this point, you’re on your own.
+If this is unsuitable, then you can always run `npm run eject` which copies all the configuration files and the transitive dependencies (Webpack, Babel, etc) right into your project so you have full control over them. Commands like `npm start` and `npm run build` will still work, but they will point to the copied scripts so you can tweak them. At this point, you’re on your own.
 
 **Note: this is a one-way operation - once you eject, you can’t go back!**
 

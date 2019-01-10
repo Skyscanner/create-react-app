@@ -18,8 +18,6 @@ npm start
 - CSS Modules enabled by default for all `.css` & `.scss` files.
 - Ability to create a bundle for server side rending.
 - Automatic chunking is disabled by default.
-- ESlint moved from webpack to standalone `eslint-config-skyscanner` config.
-- Stylelint bundled by default with `stylelint-config-skyscanner`.
 - **`css.html` & `js.html`**: New files in the `build/` output folder. These are html partials that include `<script />` and `<link />` references to the various static assets output by webpack. Useful if automatic chunking is turned on and you don't want to worry about order.
 - A bunch of configuration options via `"backpack-react-scripts"` field in `package.json`:
   - `crossOriginLoading`: Modify the default behaviour, see [docs](https://webpack.js.org/configuration/output/#output-crossoriginloading).
