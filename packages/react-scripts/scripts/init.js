@@ -98,11 +98,6 @@ module.exports = function(
     start: 'react-scripts start',
     build: 'react-scripts build',
     test: 'react-scripts test',
-    'lint:scss': "stylelint 'src/**/*.scss' --syntax scss",
-    'lint:scss:fix': "stylefmt --recursive 'src/**/*.scss'",
-    'lint:js': 'eslint . --ignore-path .gitignore --ext .js,.jsx',
-    'lint:js:fix': 'npm run lint:js -- --fix',
-    lint: 'npm run lint:js && npm run lint:scss',
     eject: 'react-scripts eject',
   };
 
@@ -241,9 +236,6 @@ module.exports = function(
   console.log();
   console.log(chalk.cyan(`  ${displayedCommand} test`));
   console.log('    Starts the test runner.');
-  console.log();
-  console.log(chalk.cyan(`  ${displayedCommand} lint`));
-  console.log('    Lints all JavaScript & SCSS.');
   console.log();
   console.log(
     chalk.cyan(`  ${displayedCommand} ${useYarn ? '' : 'run '}eject`)
