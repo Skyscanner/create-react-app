@@ -1,10 +1,13 @@
 # `backpack-react-scripts` Change Log
 
-## UNRELEASED
+## 7.0.0 - 2019-01-10
 ### Breaking
-- Rebased onto `upstream/master` v2.1.2 (0f4781e8507249ce29a9ac1409fece67c1a53c38)
+- Rebased onto `upstream/master` v2.1.2 (3e1dc990130c45f57c647e847682ded0ba352c7b)
+- This release rebases `backpack-react-scripts` on top of `create-react-app` v2! The major changes have been summarised in the following blog post:
+  [Create React App 2.0: Babel 7, Sass, and More.](https://reactjs.org/blog/2018/10/01/create-react-app-v2.html)
+- **Some of these changes are breaking. Please follow [this guide](./migrating-from-v6-to-v7.md) when upgrading.**
 
-## 6.0.1 - 2018-02-11
+## 6.0.0 - 2018-11-02
 ### Breaking
 - Add css modules to `.css` imports. This is only valid for projects using css modules
 
