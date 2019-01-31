@@ -53,7 +53,7 @@ You can read more about [these polyfills here](https://github.com/facebook/creat
 
 [Webpack 4 changed the behavior of import()](https://medium.com/webpack/webpack-4-import-and-commonjs-d619d626b655) to be closer in line with the specification.
 
-Previously, importing a CommonJS module did not require you specify the default export. In most cases, this is now required.
+Previously, importing a CommonJS module when [code splitting](https://webpack.js.org/guides/code-splitting/) did not require you specify the default export. In most cases, this is now required.
 If you see errors in your application about `... is not a function`, you likely need to update your dynamic import, e.g.:
 
 ```
