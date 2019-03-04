@@ -35,6 +35,7 @@ const typescriptFormatter = require('react-dev-utils/typescriptFormatter');
 const getCacheIdentifier = require('react-dev-utils/getCacheIdentifier');
 // @remove-on-eject-end
 
+const LoadablePlugin = require('@loadable/webpack-plugin');
 const sassFunctions = require('bpk-mixins/sass-functions');
 // const camelCase = require('lodash/camelCase');
 const pkgJson = require(paths.appPackageJson);
@@ -436,6 +437,7 @@ module.exports = function(webpackEnv) {
                 ),
                 // @remove-on-eject-end
                 plugins: [
+                  "@loadable/babel-plugin",
                   [
                     require.resolve('babel-plugin-named-asset-import'),
                     {
@@ -609,6 +611,7 @@ module.exports = function(webpackEnv) {
       ],
     },
     plugins: [
+      new LoadablePlugin(),
       // Generates an `index.html` file with the <script> injected.
       // new HtmlWebpackPlugin(
       //   Object.assign(
