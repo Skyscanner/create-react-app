@@ -38,6 +38,12 @@
     "@babel/runtime": "7.4.3",
     "babel-plugin-dynamic-import-node": "2.2.0",
     "babel-plugin-macros": "2.5.1",
-    "babel-plugin-transform-react-remove-prop-types": "0.4.24"
-  }
+    "babel-plugin-transform-react-remove-prop-types": "0.4.24",
+    "snyk": "^1.189.0"
+  },
+  "scripts": {
+    "snyk-protect": "snyk protect",
+    "prepublish": "npm run snyk-protect"
+  },
+  "snyk": true
 }
