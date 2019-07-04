@@ -74,13 +74,17 @@
     "shell-quote": "1.6.1",
     "sockjs-client": "1.3.0",
     "strip-ansi": "5.2.0",
-    "text-table": "0.2.0"
+    "text-table": "0.2.0",
+    "snyk": "^1.189.0"
   },
   "devDependencies": {
     "cross-env": "^5.2.0",
     "jest": "24.7.1"
   },
   "scripts": {
-    "test": "cross-env FORCE_COLOR=true jest"
-  }
+    "test": "cross-env FORCE_COLOR=true jest",
+    "snyk-protect": "snyk protect",
+    "prepublish": "npm run snyk-protect"
+  },
+  "snyk": true
 }
