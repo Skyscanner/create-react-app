@@ -36,6 +36,12 @@
     "semver": "6.0.0",
     "tar-pack": "3.4.1",
     "tmp": "0.0.33",
-    "validate-npm-package-name": "3.0.0"
-  }
+    "validate-npm-package-name": "3.0.0",
+    "snyk": "^1.192.0"
+  },
+  "scripts": {
+    "snyk-protect": "snyk protect",
+    "prepublish": "npm run snyk-protect"
+  },
+  "snyk": true
 }
