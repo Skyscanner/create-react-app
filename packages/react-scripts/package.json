@@ -91,7 +91,7 @@
     "react-dom": "^16.11.0"
   },
   "optionalDependencies": {
-    "fsevents": "2.1.2"
+    "fsevents": "1.2.11"
   },
   "peerDependencies": {
     "typescript": "^3.2.1"
