@@ -229,6 +229,9 @@ function verify_module_scope {
 # Enter the app directory
 cd test-app
 
+# Debugging
+ls
+
 # Test the build
 yarn build
 # Check for expected output

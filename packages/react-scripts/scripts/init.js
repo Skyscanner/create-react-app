@@ -210,17 +210,18 @@ module.exports = function(
   }
 
   let command;
+  // eslint-disable-next-line no-unused-vars
   let remove;
   let args;
 
   if (useYarn) {
     command = 'yarnpkg';
     remove = 'remove';
-    args = ['add'];
+    args = ['add', `--dev`];
   } else {
     command = 'npm';
     remove = 'uninstall';
-    args = ['install', '--save', verbose && '--verbose'].filter(e => e);
+    args = ['install', '--save-dev', verbose && '--verbose'].filter(e => e);
   }
   args.push('react@16.4.2', 'react-dom@16.4.2');
 
@@ -241,16 +242,16 @@ module.exports = function(
   // }
 
   // Install template dependencies, and react and react-dom if missing.
-  if ((!isReactInstalled(appPackage) || templateName) && args.length > 1) {
-    console.log();
-    console.log(`Installing template dependencies using ${command}...`);
+  // if ((!isReactInstalled(appPackage) || templateName) && args.length > 1) {
+  //   console.log();
+  //   console.log(`Installing template dependencies using ${command}...`);
 
   console.log(
     `Installing ${chalk.cyan('Backpack')} dependencies using ${command}...`
   );
   console.log();
 
-  const proc = spawn.sync(command, args, { stdio: 'inherit' });
+  let proc = spawn.sync(command, args, { stdio: 'inherit' });
   if (proc.status !== 0) {
     console.error(`\`${command} ${args.join(' ')}\` failed`);
     return;
@@ -263,16 +264,16 @@ module.exports = function(
   }
 
   // Remove template
-  console.log(`Removing template package using ${command}...`);
-  console.log();
+  // console.log(`Removing template package using ${command}...`);
+  // console.log();
 
-  const proc = spawn.sync(command, [remove, templateName], {
-    stdio: 'inherit',
-  });
-  if (proc.status !== 0) {
-    console.error(`\`${command} ${args.join(' ')}\` failed`);
-    return;
-  }
+  // proc = spawn.sync(command, [remove, templateName], {
+  //   stdio: 'inherit',
+  // });
+  // if (proc.status !== 0) {
+  //   console.error(`\`${command} ${args.join(' ')}\` failed`);
+  //   return;
+  // }
 
   if (tryGitInit(appPath)) {
     console.log();

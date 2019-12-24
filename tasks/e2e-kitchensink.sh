@@ -93,7 +93,7 @@ publishToLocalRegistry
 
 # Install the app in a temporary location
 cd $temp_app_path
-npx create-react-app test-kitchensink --template=file:"$root_path"/packages/react-scripts/fixtures/kitchensink
+npx create-react-app test-kitchensink --template=file:"$root_path"/packages/react-scripts
 
 # Install the test module
 cd "$temp_module_path"
