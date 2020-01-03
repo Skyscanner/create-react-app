@@ -249,11 +249,11 @@ module.exports = function(
   );
   console.log();
 
-  const proc = spawn.sync(command, args, { stdio: 'inherit' });
-  if (proc.status !== 0) {
-    console.error(`\`${command} ${args.join(' ')}\` failed`);
-    return;
-  }
+  // const proc = spawn.sync(command, args, { stdio: 'inherit' });
+  // if (proc.status !== 0) {
+  //   console.error(`\`${command} ${args.join(' ')}\` failed`);
+  //   return;
+  // }
   // }
 
   if (args.find(arg => arg.includes('typescript'))) {
@@ -332,11 +332,11 @@ module.exports = function(
   console.log('Happy hacking!');
 };
 
-// function isReactInstalled(appPackage) {
-//   const dependencies = appPackage.dependencies || {};
+function isReactInstalled(appPackage) {
+  const dependencies = appPackage.dependencies || {};
 
-//   return (
-//     typeof dependencies.react !== 'undefined' &&
-//     typeof dependencies['react-dom'] !== 'undefined'
-//   );
-// }
+  return (
+    typeof dependencies.react !== 'undefined' &&
+    typeof dependencies['react-dom'] !== 'undefined'
+  );
+}

@@ -33,16 +33,15 @@ const ModuleNotFoundPlugin = require('react-dev-utils/ModuleNotFoundPlugin');
 const ForkTsCheckerWebpackPlugin = require('react-dev-utils/ForkTsCheckerWebpackPlugin');
 const typescriptFormatter = require('react-dev-utils/typescriptFormatter');
 // @remove-on-eject-begin
-const eslint = require('eslint');
+// const eslint = require('eslint');
 const getCacheIdentifier = require('react-dev-utils/getCacheIdentifier');
 // @remove-on-eject-end
 const postcssNormalize = require('postcss-normalize');
 
-const appPackageJson = require(paths.appPackageJson);
-
 const sassFunctions = require('bpk-mixins/sass-functions');
 const camelCase = require('lodash/camelCase');
 const pkgJson = require(paths.appPackageJson);
+const appPackageJson = require(paths.appPackageJson);
 
 const bpkReactScriptsConfig = pkgJson['backpack-react-scripts'] || {};
 
@@ -158,7 +157,7 @@ module.exports = function(webpackEnv) {
             ...preProcessorOptions,
             ...{
               sourceMap: isEnvProduction && shouldUseSourceMap,
-            }
+            },
           },
         },
         {
@@ -203,7 +202,7 @@ module.exports = function(webpackEnv) {
       // changing JS code would still trigger a refresh.
     ].filter(Boolean),
     output: {
-      jsonpFunction: camelCase(pkgJson.name + 'JsonpCallback'),
+      jsonpFunction: camelCase(appPackageJson.name + 'JsonpCallback'),
       crossOriginLoading,
       // The build folder.
       path: isEnvProduction ? paths.appBuild : undefined,
@@ -233,7 +232,7 @@ module.exports = function(webpackEnv) {
           (info => path.resolve(info.absoluteResourcePath).replace(/\\/g, '/')),
       // Prevents conflicts when multiple Webpack runtimes (from different apps)
       // are used on the same page.
-      jsonpFunction: `webpackJsonp${appPackageJson.name}`,
+      //jsonpFunction: `webpackJsonp${appPackageJson.name}`,
       // this defaults to 'window', but by setting it to 'this' then
       // module chunks which are built will work in web workers as well.
       globalObject: 'this',
@@ -310,11 +309,13 @@ module.exports = function(webpackEnv) {
         ? {
             chunks: 'all',
             name: false,
-            cacheGroups: bpkReactScriptsConfig.vendorsChunkRegex ? {
-              vendors: {
-                test: new RegExp(bpkReactScriptsConfig.vendorsChunkRegex),
-              },
-            } : {},
+            cacheGroups: bpkReactScriptsConfig.vendorsChunkRegex
+              ? {
+                  vendors: {
+                    test: new RegExp(bpkReactScriptsConfig.vendorsChunkRegex),
+                  },
+                }
+              : {},
           }
         : {},
       // Keep the runtime chunk seperated to enable long term caching
