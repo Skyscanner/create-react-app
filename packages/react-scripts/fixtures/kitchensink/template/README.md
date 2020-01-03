@@ -1,52 +1,202 @@
-# Contributing to Create React App's E2E tests
+> _This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app) +
+> [backpack-react-scripts](https://github.com/Skyscanner/backpack-react-scripts/tree/master/packages/react-scripts)._
+> It is very similar to one that you would create using [Create React App](https://github.com/facebook/create-react-app)
+> without [backpack-react-scripts](https://github.com/Skyscanner/backpack-react-scripts/tree/master/packages/react-scripts),
+> so please refer to [it's documentation](https://github.com/facebook/create-react-app/blob/master/packages/react-scripts/template/README.md)
+> for more usage information.
 
-This is an end to end kitchensink test suite, but has multiple usages in it.
+# [_Put your project name here_]
 
-## Running the test suite
+[_Add a brief description of your project here._]
 
-Tests are automatically run by the CI tools.
-In order to run them locally, without having to manually install and configure everything, the `yarn e2e:docker` CLI command can be used.
+## npm script commands
 
-This is a script that runs a **Docker** container, where the node version, git branch to clone, test suite, and whether to run it with `yarn` or `npm` can be chosen.
-Run `yarn e2e:docker --help` to get additional info.
+`backpack-react-scripts` is listed as a `devDependency` in your [package.json](./package.json) and exposes the following npm scripts:
 
-If you need guidance installing **Docker**, you should follow their [official docs](https://docs.docker.com/engine/installation/).
+- `npm start`: Runs the app in development mode. Open [http://localhost:3000/](http://localhost:3000/) to view it in the browser. The page will reload if you make edits. You will see the build errors in the console.
+- `npm test`: Runs the test watcher in an interactive mode. By default, runs tests related to files changes since the last commit.
+- `npm run build`: Builds the app for production to the build folder. It correctly bundles React in production mode and optimizes the build for the best performance. The build is minified and the filenames include the hashes. Your app is ready to be deployed!
 
-## Writing tests
+## Excluding React / ReactDOM from the output bundle
 
-Each time a new feature is added, it is advised to add at least one test covering it.
+Sometimes you need to exclude React (or any module) from your app's bundle for performance / code sharing reasons (i.e. if it's on the page already). To do this, add the following to your `package.json`:
 
-Features are categorized by their scope:
+```json
+{
+  ...
+  "backpack-react-scripts": {
+    "externals": {
+      "react": "React",
+      "react-dom": "ReactDOM"
+    }
+  }
+}
+```
 
-- _env_, all those which deal with environment variables (e.g. `NODE_PATH`)
+Now when you run `npm run build`, every `'react'` / `'react-dom'` import is replaced with `window.React` / `window.ReactDOM`. You'll also notice that the output bundle size is dramatically smaller. _Note:_ You are responsible for ensuring that React is loaded before your app is!
 
-- _syntax_, all those which showcase a single EcmaScript syntax feature that is expected to be transpiled by **Babel**
+## Server Side Rendering (SSR)
 
-- _webpack_, all those which make use of webpack settings, loaders or plugins
+Most of the time you wont need server-side rendering, however if you need to generate your app's HTML on the server and send the markup down on the initial request to improve perceived page load or to allow search engines to crawl your pages for SEO purposes, then create a file named `ssr.js` in your app's root folder:
 
-### Using it as Unit Tests
+```
+my-app/
+  src/
+    ...
+    index.js
+    ssr.js    // <-- create this file
+```
 
-In it's most basic for this serve as a collection of unit tests on a single functionality.
+Inside `ssr.js`, export the components that you wish to expose for server-side rendering - the file contents should look something like this:
 
-Unit tests are written in a `src/features/**/*.test.js` file located in the same folder as the feature they test, and usually consist of a `ReactDOM.render` call.
+```js
+import App from './App';
 
-These tests are run by **jest** and the environment is `test`, so that it resembles how a **Create React App** application is tested.
+export default { App };
+```
 
-### Using it as Integration Tests
+Run `npm run build` as you would to build a production browser bundle - you should notice an additional `ssr.js` file in the output directory:
 
-This suite tests how the single features as before behave while development and in production.
-A local HTTP server is started, then every single feature is loaded, one by one, to be tested.
+```
+my-app/
+  build/
+    static/
+    asset-manifest.json
+    favicon.ico
+    index.html
+    ssr.js                // <-- new output file
+```
 
-Test are written in `integration/{env|syntax|webpack}.test.js`, depending on their scope.
+This file can now be required and pre-rendered on the server like so (rough implementation):
 
-For every test case added there is only a little chore to do:
+`server.js`:
 
-- a `case` statement must be added in `src/App.js`, which performs a dynamic `import()` of the feature
+```js
+const React = require('react');
+const express = require('express');
+const ReactDOMServer = require('react-dom/server');
 
-- add a test case in the appropriate integration test file, which calls and awaits `initDOM` with the previous `SwitchCase` string
+const components = require('./my-app/build/ssr').default;
 
-A usual flow for the test itself is something similar to:
+const router = express.Router();
 
-- add an `id` attribute in a target HTML tag in the feature itself
+router.get('/', (req, res) => {
+  const element = React.createElement(components.App);
+  const html = ReactDOMServer.renderToString(element);
 
-- since `initDOM` returns a `Document` element, the previous `id` attribute is used to target the feature's DOM and `expect` accordingly
+  res.render('index', { html });
+});
+
+module.exports = router;
+```
+
+`index.html`:
+
+```html
+<div id="root">{{{html}}}</div>
+```
+
+If you call `ReactDOM.render()` on a node that already has this server-rendered markup (`<div id="root">` in the example above), React will preserve it and only attach event handlers, allowing you to have a very performant first-load experience.
+
+**Note:** Your external module imports (anything you import from `node_modules/` i.e. `import React from 'react';`) are bundled into the `ssr.js` output file. If you want to exclude any external modules from the output file for performance / code sharing reasons (i.e. if it's being required elsewhere and is already in memory) you can do so by adding the following to your `package.json`:
+
+```json
+{
+  ...
+  "backpack-react-scripts": {
+    "ssrExternals": [
+      "react",
+      "react-dom"
+    ]
+  }
+}
+```
+
+## Compiling `node_modules` dependencies that contain JSX
+
+By default, modules imported from your app's `node_modules` directory will get compiled by Babel with the caveat that only standard ES features are supported. If you need to compile modules that contain non-standard ES features, including JSX, you can use the following:
+
+```json
+{
+  ...
+  "backpack-react-scripts": {
+    "babelIncludePrefixes": [
+      "my-module-prefix-",
+      "some-module"
+    ]
+  }
+}
+```
+
+The above example assumes that the module you want to compile is named with the prefix `my-module-prefix-` and a module with the name `some-module`. All entries in this array act as prefixes. It is used by all Webpack configurations as well as the Jest configuration — if you want to avoid compiling a dependency in tests, you should mock it.
+
+## Disabling AMD parsing for certain modules
+
+If you need to disable AMD module support for whatever reason, you can add the following to your `package.json`:
+
+```json
+{
+  ...
+  "backpack-react-scripts": {
+    "amdExcludes": [
+      "globalize"
+    ]
+  }
+}
+```
+
+The above example disables AMD support for the `globalize` dependency and overcomes issues such as:
+
+```sh
+Failed to compile.
+./node_modules/globalize/dist/globalize.js
+Module not found: Can't resolve 'cldr' in './node_modules/globalize/dist'
+```
+
+## Cross-origin loading of dynamic chunks
+
+You can configure [cross-origin loading](https://webpack.js.org/configuration/output/#output-crossoriginloading) of dynamic chunks like so:
+
+```json
+  "backpack-react-scripts": {
+    "crossOriginLoading": "anonymous"
+  }
+```
+
+> **Note:** `lodash` is disabled by default.
+
+## CSS Modules
+
+All Sass files are by default treated as [CSS Modules](https://github.com/css-modules/css-modules). You can opt out of this behaviour using the following config option:
+
+```
+"backpack-react-scripts": {
+  "cssModules": false
+}
+```
+
+If you decide to opt out, Sass files will not be treated as CSS Modules by default. However, you can opt-in on a per-file basis using the naming convention: `*.module.scss`.
+
+For example, with `cssModules` set to `false`:
+
+- The file `App.scss` will not be treated as CSS Module
+- The file `App.module.scss` _will_ be treated as CSS Module
+
+This allows you to upgrade your project file by file to CSS Modules.
+
+> Backpack components will _always_ be treated as CSS Modules, even if you opt out
+
+## Upgrading `backpack-react-scripts`
+
+The [Backpack team](mailto:backpack@skyscanner.net) provide ongoing maintenance and bugfixes to `backpack-react-scripts`. Please refer to
+[it's changelog](https://github.com/Skyscanner/backpack-react-scripts/tree/master/packages/react-scripts/CHANGELOG.md) for upgrade guides.
+
+## Adding your own custom build configuration
+
+If you're finding the need to customise the configuration of `backpack-react-scripts`, then please get in touch with the [Backpack team](mailto:backpack@skyscanner.net) - we are open to contributions.
+
+If this is unsuitable, then you can always run `npm run eject` which copies all the configuration files and the transitive dependencies (Webpack, Babel, etc) right into your project so you have full control over them. Commands like `npm start` and `npm run build` will still work, but they will point to the copied scripts so you can tweak them. At this point, you’re on your own.
+
+**Note: this is a one-way operation - once you eject, you can’t go back!**
+
+Please don't do this if you don't have to - the curated feature set is there to promote standardisation across Skyscanner's front-end stack.
