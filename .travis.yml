@@ -26,10 +26,10 @@ env:
     - TEST_SUITE=kitchensink
     # - TEST_SUITE=kitchensink-eject
     - TEST_SUITE=behavior
-# matrix:
-#   include:
-#     - os: osx
-#       node_js: 8
-#       env: TEST_SUITE=behavior
-#     - node_js: 6
-#       env: TEST_SUITE=old-node
+matrix:
+  include:
+    # - os: osx
+    #   node_js: 8
+    #   env: TEST_SUITE=behavior
+    - node_js: 6
+      env: TEST_SUITE=old-node
