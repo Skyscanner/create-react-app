@@ -82,11 +82,11 @@
     "workbox-webpack-plugin": "4.3.1"
   },
   "devDependencies": {
-    "bpk-component-button": "^2.1.36",
-    "bpk-component-code": "^1.1.40",
-    "bpk-component-text": "^1.0.96",
-    "bpk-mixins": "^17.11.31",
-    "bpk-stylesheets": "^3.2.143",
+    "bpk-component-button": "^3.2.0",
+    "bpk-component-code": "^2.0.21",
+    "bpk-component-text": "^2.0.21",
+    "bpk-mixins": "^19.0.21",
+    "bpk-stylesheets": "^4.1.2",
     "react": "^16.11.0",
     "react-dom": "^16.11.0"
   },
