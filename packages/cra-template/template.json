@@ -1,7 +1,14 @@
 {
   "dependencies": {
+    "@babel/helper-create-regexp-features-plugin": "^7.8.3",
+    "@babel/plugin-syntax-jsx": "^7.8.3",
     "@testing-library/react": "^9.3.2",
     "@testing-library/jest-dom": "^4.2.4",
-    "@testing-library/user-event": "^7.1.2"
+    "@testing-library/user-event": "^7.1.2",
+    "bpk-component-button": "^3.2.3",
+    "bpk-component-code": "^2.0.24",
+    "bpk-component-text": "^2.0.24",
+    "bpk-mixins": "^19.0.24",
+    "bpk-stylesheets": "^4.1.5"
   }
 }

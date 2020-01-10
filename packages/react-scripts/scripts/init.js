@@ -250,11 +250,11 @@ module.exports = function(
   );
   console.log();
 
-  const proc = spawn.sync(command, args, { stdio: 'inherit' });
-  if (proc.status !== 0) {
-    console.error(`\`${command} ${args.join(' ')}\` failed`);
-    return;
-  }
+  // const proc = spawn.sync(command, args, { stdio: 'inherit' });
+  // if (proc.status !== 0) {
+  //   console.error(`\`${command} ${args.join(' ')}\` failed`);
+  //   return;
+  // }
   // }
 
   if (args.find(arg => arg.includes('typescript'))) {
