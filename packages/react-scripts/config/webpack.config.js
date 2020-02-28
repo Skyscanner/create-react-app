@@ -184,7 +184,7 @@ module.exports = function(webpackEnv) {
       jsonpFunction: camelCase(pkgJson.name + 'JsonpCallback'),
       crossOriginLoading,
       // The build folder.
-      path: isEnvProduction ? paths.appBuild : undefined,
+      path: isEnvProduction ? paths.appBuildWeb : undefined,
       // Add /* filename */ comments to generated require()s in the output.
       pathinfo: isEnvDevelopment,
       // There will be one main bundle, and one file per asynchronous chunk.
