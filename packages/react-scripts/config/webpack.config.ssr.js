@@ -611,6 +611,7 @@ module.exports = function(webpackEnv) {
       ],
     },
     plugins: [
+      new webpack.IgnorePlugin(/\/iconv-loader$/), // https://github.com/webpack/webpack/issues/3078#issuecomment-400697407
       new HardSourceWebpackPlugin(),
       new HardSourceWebpackPlugin.ExcludeModulePlugin([
         {
