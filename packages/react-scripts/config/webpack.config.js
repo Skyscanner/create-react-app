@@ -35,6 +35,7 @@ const typescriptFormatter = require('react-dev-utils/typescriptFormatter');
 const getCacheIdentifier = require('react-dev-utils/getCacheIdentifier');
 // @remove-on-eject-end
 
+const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
 const LoadablePlugin = require('@loadable/webpack-plugin');
 const sassFunctions = require('bpk-mixins/sass-functions');
 const camelCase = require('lodash/camelCase');
@@ -184,7 +185,7 @@ module.exports = function(webpackEnv) {
       jsonpFunction: camelCase(pkgJson.name + 'JsonpCallback'),
       crossOriginLoading,
       // The build folder.
-      path: isEnvProduction ? paths.appBuildWeb : undefined,
+      path: paths.appBuildWeb,
       // Add /* filename */ comments to generated require()s in the output.
       pathinfo: isEnvDevelopment,
       // There will be one main bundle, and one file per asynchronous chunk.
@@ -604,6 +605,7 @@ module.exports = function(webpackEnv) {
       ],
     },
     plugins: [
+      new HardSourceWebpackPlugin(),
       new LoadablePlugin(),
       // Generates an `index.html` file with the <script> injected.
       new HtmlWebpackPlugin(

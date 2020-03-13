@@ -105,6 +105,11 @@ checkBrowsers(paths.appPath, isInteractive)
       proxyConfig,
       urls.lanUrlForConfig
     );
+
+    serverConfig.writeToDisk = (filePath) => {
+      return /loadable-stats\.json/.test(filePath);
+    };
+
     const devServer = new WebpackDevServer(compiler, serverConfig);
     // Launch WebpackDevServer.
     devServer.listen(port, HOST, err => {

@@ -35,6 +35,7 @@ const typescriptFormatter = require('react-dev-utils/typescriptFormatter');
 const getCacheIdentifier = require('react-dev-utils/getCacheIdentifier');
 // @remove-on-eject-end
 
+const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
 const LoadablePlugin = require('@loadable/webpack-plugin');
 const sassFunctions = require('bpk-mixins/sass-functions');
 // const camelCase = require('lodash/camelCase');
@@ -101,7 +102,7 @@ module.exports = function(webpackEnv) {
     preProcessorOptions = {}
   ) => {
     const loaders = [
-      isEnvDevelopment && require.resolve('style-loader'),
+      isEnvDevelopment && require.resolve('isomorphic-style-loader'),
       isEnvProduction && {
         loader: MiniCssExtractPlugin.loader,
         options: Object.assign(
@@ -172,8 +173,8 @@ module.exports = function(webpackEnv) {
       // the line below with these two lines if you prefer the stock client:
       // require.resolve('webpack-dev-server/client') + '?/',
       // require.resolve('webpack/hot/dev-server'),
-      isEnvDevelopment &&
-        require.resolve('react-dev-utils/webpackHotDevClient'),
+      // isEnvDevelopment &&
+      //   require.resolve('react-dev-utils/webpackHotDevClient'),
       // Finally, this is your app's code:
       // paths.appIndexJs,
       paths.appSsrJs,
@@ -183,7 +184,7 @@ module.exports = function(webpackEnv) {
     ].filter(Boolean),
     output: {
       // The build folder.
-      path: isEnvProduction ? paths.appBuildSsr : undefined,
+      path: paths.appBuildSsr,
       // Add /* filename */ comments to generated require()s in the output.
       pathinfo: isEnvDevelopment,
       // There will be one main bundle, and one file per asynchronous chunk.
@@ -611,6 +612,7 @@ module.exports = function(webpackEnv) {
       ],
     },
     plugins: [
+      new HardSourceWebpackPlugin(),
       new LoadablePlugin(),
       // Generates an `index.html` file with the <script> injected.
       // new HtmlWebpackPlugin(
