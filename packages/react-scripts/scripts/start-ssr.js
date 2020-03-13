@@ -31,6 +31,7 @@ const verifyTypeScriptSetup = require('./utils/verifyTypeScriptSetup');
 verifyTypeScriptSetup();
 // @remove-on-eject-end
 
+const path = require('path');
 const fs = require('fs');
 const configFactory = require('../config/webpack.config.ssr');
 const { createCompiler } = require('react-dev-utils/WebpackDevServerUtils');
@@ -54,3 +55,11 @@ compiler.watch(
     }
   },
 );
+
+compiler.hooks.invalid.tap('invalid', () => {
+  fs.writeFileSync(path.join(paths.appBuildSsr, '.build-invalidated'), Date.now());
+});
+
+compiler.hooks.done.tap('done', () => {
+  fs.writeFileSync(path.join(paths.appBuildSsr, '.build-done'), Date.now());
+});
