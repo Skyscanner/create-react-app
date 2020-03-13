@@ -102,7 +102,6 @@ module.exports = function(webpackEnv) {
     preProcessorOptions = {}
   ) => {
     const loaders = [
-      isEnvDevelopment && require.resolve('isomorphic-style-loader'),
       isEnvProduction && {
         loader: MiniCssExtractPlugin.loader,
         options: Object.assign(
@@ -111,7 +110,7 @@ module.exports = function(webpackEnv) {
         ),
       },
       {
-        loader: require.resolve('css-loader'),
+        loader: require.resolve('css-loader/locals'),
         options: cssOptions,
       },
       {
@@ -613,6 +612,16 @@ module.exports = function(webpackEnv) {
     },
     plugins: [
       new HardSourceWebpackPlugin(),
+      new HardSourceWebpackPlugin.ExcludeModulePlugin([
+        {
+            // HardSource works with mini-css-extract-plugin but due to how
+            // mini-css emits assets, assets are not emitted on repeated builds with
+            // mini-css and hard-source together. Ignoring the mini-css loader
+            // modules, but not the other css loader modules, excludes the modules
+            // that mini-css needs rebuilt to output assets every time.
+            test: /mini-css-extract-plugin[\\/]dist[\\/]loader/,
+        },
+      ]),
       new LoadablePlugin(),
       // Generates an `index.html` file with the <script> injected.
       // new HtmlWebpackPlugin(
@@ -662,7 +671,7 @@ module.exports = function(webpackEnv) {
       // Otherwise React will be compiled in the very slow development mode.
       new webpack.DefinePlugin(env.stringified),
       // This is necessary to emit hot updates (currently CSS only):
-      isEnvDevelopment && new webpack.HotModuleReplacementPlugin(),
+      // isEnvDevelopment && new webpack.HotModuleReplacementPlugin(),
       // Watcher doesn't work well if you mistype casing in a path so we use
       // a plugin that prints an error when you attempt to do this.
       // See https://github.com/facebook/create-react-app/issues/240
