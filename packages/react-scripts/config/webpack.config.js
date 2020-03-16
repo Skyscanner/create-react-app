@@ -431,7 +431,7 @@ module.exports = function(webpackEnv) {
                 ),
                 // @remove-on-eject-end
                 plugins: [
-                  "@loadable/babel-plugin",
+                  require.resolve('@loadable/babel-plugin'),
                   [
                     require.resolve('babel-plugin-named-asset-import'),
                     {
