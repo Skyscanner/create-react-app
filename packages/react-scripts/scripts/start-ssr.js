@@ -38,15 +38,14 @@ const webpack = require('webpack');
 const configFactory = require('../config/webpack.config.ssr');
 const paths = require('../config/paths');
 
-const registerStatusFileHooks = require('./utils/registerStatusFileHooks');
+const statusFile = require('./utils/statusFile');
 
 const config = configFactory('development');
 const appName = require(paths.appPackageJson).name;
 const useYarn = fs.existsSync(paths.yarnLockFile);
 
 const compiler = createCompiler(webpack, config, appName, undefined, useYarn);
-
-registerStatusFileHooks(compiler);
+statusFile.init(compiler, paths.appBuildSsr);
 
 compiler.watch(
   {
@@ -57,5 +56,7 @@ compiler.watch(
       console.log(err.message || err);
       process.exit(1);
     }
+
+    statusFile.done(paths.appBuildSsr);
   }
 );
