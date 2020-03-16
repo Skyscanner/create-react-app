@@ -31,35 +31,31 @@ const verifyTypeScriptSetup = require('./utils/verifyTypeScriptSetup');
 verifyTypeScriptSetup();
 // @remove-on-eject-end
 
-const path = require('path');
 const fs = require('fs');
-const configFactory = require('../config/webpack.config.ssr');
 const { createCompiler } = require('react-dev-utils/WebpackDevServerUtils');
 const webpack = require('webpack');
 
+const configFactory = require('../config/webpack.config.ssr');
 const paths = require('../config/paths');
+
+const registerStatusFileHooks = require('./utils/registerStatusFileHooks');
+
 const config = configFactory('development');
 const appName = require(paths.appPackageJson).name;
 const useYarn = fs.existsSync(paths.yarnLockFile);
 
-const compiler = createCompiler(webpack, config, 'acorn-webapp', appName, useYarn);
+const compiler = createCompiler(webpack, config, appName, undefined, useYarn);
+
+registerStatusFileHooks(compiler);
 
 compiler.watch(
   {
     ignored: ['node_modules'],
   },
-  (err, stats) => {
+  err => {
     if (err) {
       console.log(err.message || err);
       process.exit(1);
     }
-  },
+  }
 );
-
-compiler.hooks.invalid.tap('invalid', () => {
-  fs.writeFileSync(path.join(paths.appBuildSsr, '.build-invalidated'), Date.now());
-});
-
-compiler.hooks.done.tap('done', () => {
-  fs.writeFileSync(path.join(paths.appBuildSsr, '.build-done'), Date.now());
-});

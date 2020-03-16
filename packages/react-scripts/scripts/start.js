@@ -31,6 +31,7 @@ const verifyTypeScriptSetup = require('./utils/verifyTypeScriptSetup');
 verifyTypeScriptSetup();
 // @remove-on-eject-end
 
+const path = require('path');
 const fs = require('fs');
 const chalk = require('chalk');
 const webpack = require('webpack');
@@ -47,6 +48,8 @@ const openBrowser = require('react-dev-utils/openBrowser');
 const paths = require('../config/paths');
 const configFactory = require('../config/webpack.config');
 const createDevServerConfig = require('../config/webpackDevServer.config');
+
+const registerStatusFileHooks = require('./utils/registerStatusFileHooks');
 
 const useYarn = fs.existsSync(paths.yarnLockFile);
 const isInteractive = process.stdout.isTTY;
@@ -97,6 +100,9 @@ checkBrowsers(paths.appPath, isInteractive)
     const urls = prepareUrls(protocol, HOST, port);
     // Create a webpack compiler that is configured with custom messages.
     const compiler = createCompiler(webpack, config, appName, urls, useYarn);
+
+    registerStatusFileHooks(compiler);
+
     // Load proxy config
     const proxySetting = require(paths.appPackageJson).proxy;
     const proxyConfig = prepareProxy(proxySetting, paths.appPublic);
@@ -106,7 +112,7 @@ checkBrowsers(paths.appPath, isInteractive)
       urls.lanUrlForConfig
     );
 
-    serverConfig.writeToDisk = (filePath) => {
+    serverConfig.writeToDisk = filePath => {
       return /loadable-stats\.json/.test(filePath);
     };
 
