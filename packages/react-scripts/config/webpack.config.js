@@ -60,6 +60,7 @@ const shouldInlineRuntimeChunk = process.env.INLINE_RUNTIME_CHUNK !== 'false';
 // We might not want to use the hard source plugin on environments that won't persist the cache for later
 const useHardSourceWebpackPlugin =
   process.env.USE_HARD_SOURCE_WEBPACK_PLUGIN === 'true';
+const environmentHash = require('./environmentHash');
 
 // Check if TypeScript is setup
 const useTypeScript = fs.existsSync(paths.appTsConfig);
@@ -610,7 +611,8 @@ module.exports = function(webpackEnv) {
       ],
     },
     plugins: [
-      useHardSourceWebpackPlugin && new HardSourceWebpackPlugin(),
+      useHardSourceWebpackPlugin &&
+        new HardSourceWebpackPlugin({ environmentHash }),
       useHardSourceWebpackPlugin &&
         new HardSourceWebpackPlugin.ExcludeModulePlugin([
           {
@@ -689,7 +691,10 @@ module.exports = function(webpackEnv) {
       // It is absolutely essential that NODE_ENV is set to production
       // during a production build.
       // Otherwise React will be compiled in the very slow development mode.
-      new webpack.DefinePlugin(env.stringified),
+      new webpack.DefinePlugin({
+        ...env.stringified,
+        'typeof window': '"object"',
+      }),
       // This is necessary to emit hot updates (currently CSS only):
       isEnvDevelopment && new webpack.HotModuleReplacementPlugin(),
       // Watcher doesn't work well if you mistype casing in a path so we use

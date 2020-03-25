@@ -17,7 +17,7 @@ const PnpWebpackPlugin = require('pnp-webpack-plugin');
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
 // const InlineChunkHtmlPlugin = require('react-dev-utils/InlineChunkHtmlPlugin');
 // const TerserPlugin = require('terser-webpack-plugin');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+// const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 // const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 // const safePostCssParser = require('postcss-safe-parser');
 // const ManifestPlugin = require('webpack-manifest-plugin');
@@ -59,6 +59,7 @@ const shouldUseSourceMap = process.env.GENERATE_SOURCEMAP !== 'false';
 // We might not want to use the hard source plugin on environments that won't persist the cache for later
 const useHardSourceWebpackPlugin =
   process.env.USE_HARD_SOURCE_WEBPACK_PLUGIN === 'true';
+const environmentHash = require('./environmentHash');
 
 // Check if TypeScript is setup
 const useTypeScript = fs.existsSync(paths.appTsConfig);
@@ -87,7 +88,7 @@ module.exports = function(webpackEnv) {
     : isEnvDevelopment && '/';
   // Some apps do not use client-side routing with pushState.
   // For these, "homepage" can be set to "." to enable relative asset paths.
-  const shouldUseRelativeAssetPaths = publicPath === './';
+  // const shouldUseRelativeAssetPaths = publicPath === './';
 
   // `publicUrl` is just like `publicPath`, but we will provide it to our app
   // as %PUBLIC_URL% in `index.html` and `process.env.PUBLIC_URL` in JavaScript.
@@ -616,7 +617,8 @@ module.exports = function(webpackEnv) {
     },
     plugins: [
       new webpack.IgnorePlugin(/\/iconv-loader$/), // https://github.com/webpack/webpack/issues/3078#issuecomment-400697407
-      useHardSourceWebpackPlugin && new HardSourceWebpackPlugin(),
+      useHardSourceWebpackPlugin &&
+        new HardSourceWebpackPlugin({ environmentHash }),
       useHardSourceWebpackPlugin &&
         new HardSourceWebpackPlugin.ExcludeModulePlugin([
           {
@@ -675,7 +677,10 @@ module.exports = function(webpackEnv) {
       // It is absolutely essential that NODE_ENV is set to production
       // during a production build.
       // Otherwise React will be compiled in the very slow development mode.
-      new webpack.DefinePlugin(env.stringified),
+      new webpack.DefinePlugin({
+        ...env.stringified,
+        'typeof window': '"undefined"',
+      }),
       // This is necessary to emit hot updates (currently CSS only):
       // isEnvDevelopment && new webpack.HotModuleReplacementPlugin(),
       // Watcher doesn't work well if you mistype casing in a path so we use
