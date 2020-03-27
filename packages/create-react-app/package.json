@@ -1,6 +1,7 @@
 {
   "name": "create-react-app",
   "version": "3.4.1",
+  "private": true,
   "keywords": [
     "react"
   ],
