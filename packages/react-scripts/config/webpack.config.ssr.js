@@ -350,6 +350,7 @@ module.exports = function(webpackEnv) {
       ],
     },
     module: {
+      noParse: /iconv-loader\.js$/, // https://github.com/webpack/webpack/issues/3078#issuecomment-400697407
       strictExportPresence: true,
       rules: [
         // Disable require.ensure as it's not a standard language feature.
@@ -616,7 +617,6 @@ module.exports = function(webpackEnv) {
       ],
     },
     plugins: [
-      new webpack.IgnorePlugin(/\/iconv-loader$/), // https://github.com/webpack/webpack/issues/3078#issuecomment-400697407
       useHardSourceWebpackPlugin &&
         new HardSourceWebpackPlugin({ environmentHash }),
       useHardSourceWebpackPlugin &&
