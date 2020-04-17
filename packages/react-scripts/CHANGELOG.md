@@ -3,7 +3,7 @@
 ## 8.0.0 (Pending)
 
 - Added support for loadable components.
-- Added start-ssr command, to produce Node.js-compatible watched output. Several changes to SSR webpack config to support.
+- Added `start-ssr` command, to produce Node.js-compatible watched output. Several changes to SSR webpack config to support.
 - Defined `typeof window` for browser and SSR environments, enabling dead code elimination (https://webpack.js.org/plugins/define-plugin/#usage)
 - SSR output always include hash as part of filename
 - Added experimental support for https://github.com/mzgoddard/hard-source-webpack-plugin/, enabled by `USE_HARD_SOURCE_WEBPACK_PLUGIN=true` environment variable
