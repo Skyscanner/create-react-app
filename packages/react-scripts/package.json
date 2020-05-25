@@ -70,6 +70,7 @@
     "webpack": "4.42.0",
     "webpack-dev-server": "3.10.3",
     "webpack-manifest-plugin": "2.2.0",
+    "webpack-subresource-integrity": "^1.4.1",
     "workbox-webpack-plugin": "4.3.1"
   },
   "devDependencies": {
