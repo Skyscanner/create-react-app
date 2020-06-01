@@ -30,6 +30,8 @@ npm start
   - `externals`: exposing the Webpack config to modify externals, see [docs](https://webpack.js.org/configuration/externals/).
   - `ssrExternals`: Similar to above, but for `ssr.js` only.
   - `cssModules`: Boolean, true by default.
+  - `sriEnabled`: Sets if SRI is to be used during build to add integrity hash for files, see [docs](https://github.com/waysact/webpack-subresource-integrity/blob/master/README.md).
+    - **Note** if this is enabled, `crossOriginLoading` value is overriden with `anonymous` in order for it to output with the integrity value.
 
 ## Releasing a new version of `backpack-react-scripts`
 

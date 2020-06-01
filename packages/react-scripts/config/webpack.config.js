@@ -49,8 +49,8 @@ const customModuleRegexes = bpkReactScriptsConfig.babelIncludePrefixes
     )
   : [];
 const cssModulesEnabled = bpkReactScriptsConfig.cssModules !== false;
-const crossOriginLoading =
-  bpkReactScriptsConfig.crossOriginLoading || 'anonymous';
+const crossOriginLoading = bpkReactScriptsConfig.crossOriginLoading || false;
+const sriEnabled = bpkReactScriptsConfig.sriEnabled || false;
 
 // Source maps are resource heavy and can cause out of memory issue for large source files.
 const shouldUseSourceMap = process.env.GENERATE_SOURCEMAP !== 'false';
@@ -193,7 +193,7 @@ module.exports = function(webpackEnv) {
       // changing JS code would still trigger a refresh.
     ].filter(Boolean),
     output: {
-      crossOriginLoading,
+      crossOriginLoading: sriEnabled ? 'anonymous' : crossOriginLoading,
       // The build folder.
       path: isEnvProduction ? paths.appBuild : undefined,
       // Add /* filename */ comments to generated require()s in the output.
@@ -760,10 +760,11 @@ module.exports = function(webpackEnv) {
       // https://developer.mozilla.org/en-US/docs/Web/Security/Subresource_Integrity
       // This is a security feature that enables browsers to verify that resources
       // they fetch (for example, from a CDN) are delivered without unexpected manipulation.
-      new SubresourceIntegrityPlugin({
-        enabled: true,
-        hashFuncNames: ['sha384'],
-      }),
+      sriEnabled &&
+        new SubresourceIntegrityPlugin({
+          enabled: true,
+          hashFuncNames: ['sha384'],
+        }),
       // Moment.js is an extremely popular library that bundles large locale files
       // by default due to how webpack interprets its code. This is a practical
       // solution that requires the user to opt into importing specific locales.
