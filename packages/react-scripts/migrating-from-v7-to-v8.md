@@ -10,9 +10,9 @@ npm install --save backpack-react-scripts@^8.0.0
 
 Like any major release, `backpack-react-scripts@8` contains a few breaking changes. At least one of them will affect every user, so please scan over these sections to see what is relevant to you.
 
-###  Upgrade to Jest 24+
+### Upgrade to Jest 24+
 
-With this version brings the use of Jest `24.9.0`. Major Jest changes in [Jest v24](https://github.com/facebook/jest/blob/master/CHANGELOG.md#2400) 
+With this version brings the use of Jest `24.9.0`. Major Jest changes in [Jest v24](https://github.com/facebook/jest/blob/master/CHANGELOG.md#2400)
 
 You maybe required to upgrade to Jest 24 due to some incompatibilies with using mixed versions in BRS and your app, please ensure you check if you need to upgrade.
 
@@ -29,7 +29,7 @@ The backpack-react-scripts package provided by Create React App requires a depen
 
 ### Templating
 
-With this version brings in a feature of create-react-app which is called `templates` this allows you to specify a custom template that will be used for the base of the webapp on generation in which we have created a standard template here under [cra-template-backpack](https://github.com/Skyscanner/cra-template-backpack/) - this repo contains the base standard Backpackified template as in BRS 7 just now separated.
+With this version brings in a feature of create-react-app which is called `templates` this allows you to specify a custom template that will be used for the base of the webapp on generation in which we have created a standard template here under [cra-template-backpack](https://github.com/Skyscanner/cra-template-backpack/) - this repo contains the base standard Backpackified template as in BRS 7 but now separated.
 
 As templates are the default method when creating react apps our command for running now looks like the following:
 
