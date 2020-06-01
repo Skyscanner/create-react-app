@@ -73,7 +73,7 @@ of `create-react-app`. To keep this fork up to date, please follow the steps bel
    git rebase <commit>
    ```
 
-   > **Note:** `<commit>` should be the SHA-1 of the latest upstream release - _not_ just the latest i.e. `upstream/master`
+   > **Note:** `<commit>` should be the SHA-1 of the latest upstream release - _not_ the latest commit i.e. `upstream/master`
 
 1. Pair with someone else to fix any conflicts and cross examine changes in upstream with changes in our fork.
 

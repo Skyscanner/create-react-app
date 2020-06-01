@@ -249,6 +249,11 @@ yarn start --smoke-test
 # Test environment handling
 verify_env_url
 
+echo "Checking contents"
+ls -a
+cd src
+ls -a
+
 # Test reliance on webpack internals
 verify_module_scope
 

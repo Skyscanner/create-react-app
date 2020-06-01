@@ -109,7 +109,7 @@ npx create-react-app --version
 # ******************************************************************************
 
 cd "$temp_app_path"
-npx create-react-app test-app-dist-tag --scripts-version=@latest
+npx create-react-app test-app-dist-tag --scripts-version=backpack-react-scripts --template @skyscanner/backpack@0.0.3
 cd test-app-dist-tag
 
 # Check corresponding scripts version is installed and no TypeScript is present.
@@ -124,7 +124,7 @@ checkDependencies
 # ******************************************************************************
 
 cd "$temp_app_path"
-npx create-react-app test-app-version-number --scripts-version=1.0.17
+npx create-react-app test-app-version-number --scripts-version=backpack-react-scripts@8.0.0-beta.97ca867 --template @skyscanner/backpack@0.0.3
 cd test-app-version-number
 
 # Check corresponding scripts version is installed.
@@ -137,7 +137,7 @@ checkDependencies
 # ******************************************************************************
 
 cd "$temp_app_path"
-npx create-react-app test-use-npm-flag --use-npm --scripts-version=1.0.17
+npx create-react-app test-use-npm-flag --use-npm --scripts-version=backpack-react-scripts@8.0.0-beta.97ca867 --template @skyscanner/backpack@0.0.3
 cd test-use-npm-flag
 
 # Check corresponding scripts version is installed.
@@ -151,7 +151,7 @@ checkDependencies
 # ******************************************************************************
 
 cd "$temp_app_path"
-npx create-react-app test-app-typescript --typescript
+npx create-react-app test-app-typescript --typescript backpack-react-scripts@8.0.0-beta.97ca867 --template @skyscanner/backpack@0.0.3
 cd test-app-typescript
 
 # Check corresponding template is installed.
