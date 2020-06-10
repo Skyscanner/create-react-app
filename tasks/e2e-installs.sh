@@ -109,11 +109,11 @@ npx create-react-app --version
 # ******************************************************************************
 
 cd "$temp_app_path"
-npx create-react-app test-app-dist-tag --scripts-version=@latest
+npx create-react-app test-app-dist-tag --scripts-version=@skyscanner/backpack-react-scripts --template @skyscanner/backpack
 cd test-app-dist-tag
 
 # Check corresponding scripts version is installed and no TypeScript is present.
-exists node_modules/react-scripts
+exists node_modules/@skyscanner/backpack-react-scripts
 ! exists node_modules/typescript
 ! exists src/index.tsx
 exists src/index.js
@@ -124,12 +124,12 @@ checkDependencies
 # ******************************************************************************
 
 cd "$temp_app_path"
-npx create-react-app test-app-version-number --scripts-version=1.0.17
+npx create-react-app test-app-version-number --scripts-version=backpack-react-scripts@8.0.0-beta.41a3a687f --template @skyscanner/backpack
 cd test-app-version-number
 
 # Check corresponding scripts version is installed.
-exists node_modules/react-scripts
-grep '"version": "1.0.17"' node_modules/react-scripts/package.json
+exists node_modules/backpack-react-scripts
+grep '"version": "8.0.0-beta.41a3a687f"' node_modules/backpack-react-scripts/package.json
 checkDependencies
 
 # ******************************************************************************
@@ -137,13 +137,13 @@ checkDependencies
 # ******************************************************************************
 
 cd "$temp_app_path"
-npx create-react-app test-use-npm-flag --use-npm --scripts-version=1.0.17
+npx create-react-app test-use-npm-flag --use-npm --scripts-version=@skyscanner/backpack-react-scripts --template @skyscanner/backpack
 cd test-use-npm-flag
 
 # Check corresponding scripts version is installed.
-exists node_modules/react-scripts
+exists node_modules/@skyscanner/backpack-react-scripts
 [ ! -e "yarn.lock" ] && echo "yarn.lock correctly does not exist"
-grep '"version": "1.0.17"' node_modules/react-scripts/package.json
+grep '"version": "8.0.0"' node_modules/@skyscanner/backpack-react-scripts/package.json
 checkDependencies
 
 # ******************************************************************************
@@ -174,7 +174,7 @@ echo yes | npm run eject
 
 # Temporary workaround for https://github.com/facebook/create-react-app/issues/6099
 rm yarn.lock
-yarn add @babel/plugin-transform-react-jsx-source @babel/plugin-syntax-jsx @babel/plugin-transform-react-jsx @babel/plugin-transform-react-jsx-self
+yarn add @babel/plugin-transform-react-jsx-source @babel/plugin-syntax-jsx @babel/plugin-transform-react-jsx @babel/plugin-transform-react-jsx-self @babel/helper-create-regexp-features-plugin
 
 # Ensure env file still exists
 exists src/react-app-env.d.ts
@@ -189,12 +189,12 @@ CI=true yarn test
 # ******************************************************************************
 
 cd "$temp_app_path"
-npx create-react-app test-app-tarball-url --scripts-version=https://registry.npmjs.org/react-scripts/-/react-scripts-1.0.17.tgz
+npx create-react-app test-app-tarball-url --scripts-version=https://registry.npmjs.org/@skyscanner/backpack-react-scripts/-/backpack-react-scripts-8.0.0.tgz
 cd test-app-tarball-url
 
 # Check corresponding scripts version is installed.
-exists node_modules/react-scripts
-grep '"version": "1.0.17"' node_modules/react-scripts/package.json
+exists node_modules/@skyscanner/backpack-react-scripts
+grep '"version": "8.0.0"' node_modules/@skyscanner/backpack-react-scripts/package.json
 checkDependencies
 
 # ******************************************************************************
