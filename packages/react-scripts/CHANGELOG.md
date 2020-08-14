@@ -1,5 +1,15 @@
 # `backpack-react-scripts` Change Log
 
+## 8.1.0 (Pending)
+
+- Added support for loadable components.
+- Added `start-ssr` command, to produce Node.js-compatible watched output. Several changes to SSR Webpack config to support.
+- Defined `typeof window` for browser and SSR environments, enabling dead code elimination (https://webpack.js.org/plugins/define-plugin/#usage)
+- SSR output always includes hash as part of filename
+- Added experimental support for https://github.com/mzgoddard/hard-source-webpack-plugin/, enabled by `USE_HARD_SOURCE_WEBPACK_PLUGIN=true` environment variable
+- `web` and `ssr` subpaths for each build's output
+- Output build 'status files' (`.build-status`, one for web, one for SSR), which can be watched by a Node.js server to know when builds are in progress or completed.
+
 ## 8.0.0
 
 ### Breaking
