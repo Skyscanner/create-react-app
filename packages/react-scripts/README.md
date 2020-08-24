@@ -30,6 +30,7 @@ npm start
   - `externals`: exposing the Webpack config to modify externals, see [docs](https://webpack.js.org/configuration/externals/).
   - `ssrExternals`: Similar to above, but for `ssr.js` only.
   - `cssModules`: Boolean, true by default.
+  - `ignoreCssWarnings`: Boolean, false by default. Allows the ability to supress CSS ordering issues when its safe to allow mixed order when it has not effect on output, see [docs](https://github.com/webpack-contrib/mini-css-extract-plugin#remove-order-warnings). False by default
 
 ## Releasing a new version of `backpack-react-scripts`
 
