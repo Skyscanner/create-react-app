@@ -350,7 +350,7 @@ module.exports = function(webpackEnv) {
       ],
     },
     module: {
-      noParse: /iconv-loader\.js$/, // https://github.com/webpack/webpack/issues/3078#issuecomment-400697407
+      noParse: [/iconv-loader\.js$/, /colors\.js$/], // https://github.com/webpack/webpack/issues/3078#issuecomment-400697407
       strictExportPresence: true,
       rules: [
         // Disable require.ensure as it's not a standard language feature.
