@@ -1,5 +1,11 @@
 # `backpack-react-scripts` Change Log
 
+## 8.0.3
+
+### Fixed
+
+- Downgraded `sass-loader` to `7.3.1` due to issues with `node-sass` and functional changes to options.
+
 ## 8.0.2
 
 ### Fixed

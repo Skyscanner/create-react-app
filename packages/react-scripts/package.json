@@ -1,6 +1,6 @@
 {
   "name": "@skyscanner/backpack-react-scripts",
-  "version": "8.0.2",
+  "version": "8.0.3-alpha.1",
   "description": "Backpack configuration and scripts for Create React App.",
   "repository": {
     "type": "git",
@@ -61,7 +61,7 @@
     "react-dev-utils": "^10.2.1",
     "resolve": "1.15.0",
     "resolve-url-loader": "3.1.2",
-    "sass-loader": "8.0.2",
+    "sass-loader": "7.3.1",
     "semver": "6.3.0",
     "style-loader": "0.23.1",
     "terser-webpack-plugin": "2.3.8",
