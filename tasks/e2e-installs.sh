@@ -143,7 +143,7 @@ cd test-use-npm-flag
 # Check corresponding scripts version is installed.
 exists node_modules/@skyscanner/backpack-react-scripts
 [ ! -e "yarn.lock" ] && echo "yarn.lock correctly does not exist"
-grep '"version": "8.0.5"' node_modules/@skyscanner/backpack-react-scripts/package.json
+grep '"version": "9.0.1"' node_modules/@skyscanner/backpack-react-scripts/package.json
 checkDependencies
 
 # ******************************************************************************

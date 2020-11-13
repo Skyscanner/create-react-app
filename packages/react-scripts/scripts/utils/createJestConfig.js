@@ -62,8 +62,8 @@ module.exports = (resolve, rootDir, isEjecting) => {
       ),
     },
     transformIgnorePatterns: [
-      '[/\\\\]node_modules[/\\\\].+\\.(js|jsx|mjs|cjs|ts|tsx)$',
-      '^.+\\.module\\.(css|sass|scss)$',
+      // '[/\\\\]node_modules[/\\\\].+\\.(js|jsx|mjs|cjs|ts|tsx)$',
+      // '^.+\\.module\\.(css|sass|scss)$',
       transformIgnorePattern,
       '^.+\\.(css|sass|scss)$',
     ],

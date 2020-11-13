@@ -1,5 +1,21 @@
 # `backpack-react-scripts` Change Log
 
+## 9.0.1
+
+- Fixed an issue where eslint was being shipped, which is not required due to our own linting package.
+
+## 9.0.0
+
+With this change its is only breaking due to the requirement of needing `Jest` to be upgraded to `26.6.0`, nothing else should affect from a consumer perspective.
+
+### Breaking
+
+- Rebased onto `upstream/master` v4.0.0 (ed958938f642007645dd5ac3466db36202f8754e).
+- This release rebases `backpack-react-scripts` on top of `create-react-app` v4! The major changes have been summarised in the following blog post:
+  [Create React App 4.0](https://github.com/facebook/create-react-app/blob/master/CHANGELOG.md#400-2020-10-23)
+
+- **The only breaking change is the requirement of Jest to be upgraded. Please follow [this guide](./migrating-from-v8-to-v9.md) when upgrading.**
+
 ## 8.0.5
 
 - Updated `bpk-mixins` to latest version
