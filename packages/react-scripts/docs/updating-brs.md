@@ -28,7 +28,7 @@ of `create-react-app`. To keep this fork up to date, please follow the steps bel
    
    > This is the most time consuming part. Take care to make sure you are not regressing any functionality that we have added in our fork.
 
-   1. When rebasing its important to note the `webpack.config.ssr.js` file is an exact copy of the `webpack.config.js` file just with components commented out that are not required for SSR.
+   1. When rebasing its important to note the `webpack.config.ssr.js` file is an exact copy of the `webpack.config.js` file with components commented out that are not required for SSR.
    
       When rebasing its important to do a comparison between these files to ensure that new functionality is available to SSR and enabled where necessary.
 
