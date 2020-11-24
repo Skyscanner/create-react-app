@@ -1,4 +1,4 @@
-# Migrating from v7 to v8
+# Migrating from v8 to v9
 
 Inside any created `backpack-react-scripts` project that has not been ejected, run:
 
