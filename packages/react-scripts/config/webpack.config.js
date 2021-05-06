@@ -687,7 +687,7 @@ module.exports = function (webpackEnv) {
                 'sass-loader',
                 {
                   functions: sassFunctions,
-                },
+                }
               ),
             },
             // "file" loader makes sure those assets get served by WebpackDevServer.
