@@ -746,8 +746,8 @@ module.exports = function (webpackEnv) {
             inject: false,
             filename: 'css.html',
             template: path.resolve(__dirname, './css.html'),
-          },
-        ),
+          }
+        )
       ),
       new HtmlWebpackPlugin(
         Object.assign(
@@ -757,7 +757,7 @@ module.exports = function (webpackEnv) {
             filename: 'js.html',
             template: path.resolve(__dirname, './js.html'),
           }
-        ),
+        )
       ),
       // Inlines the webpack runtime script. This script is too small to warrant
       // a network request.
