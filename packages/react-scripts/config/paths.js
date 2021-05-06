@@ -42,7 +42,7 @@ const moduleFileExtensions = [
   'tsx',
   'json',
   'web.jsx',
-  'jsx'
+  'jsx',
 ];
 
 // Resolve file paths in the same order as webpack
@@ -76,7 +76,7 @@ module.exports = {
   appNodeModules: resolveApp('node_modules'),
   swSrc: resolveModule(resolveApp, 'src/service-worker'),
   publicUrlOrPath,
-  appSsrJs: resolveApp('src/ssr.js')
+  appSsrJs: resolveApp('src/ssr.js'),
 };
 
 // @remove-on-eject-begin
@@ -106,7 +106,7 @@ module.exports = {
   ownNodeModules: resolveOwn('node_modules'), // This is empty on npm 3
   appTypeDeclarations: resolveApp('src/react-app-env.d.ts'),
   ownTypeDeclarations: resolveOwn('lib/react-app.d.ts'),
-  cacheLoaderDir: resolveOwn('.cache/cache-loader')
+  cacheLoaderDir: resolveOwn('.cache/cache-loader'),
 };
 
 const ownPackageJson = require('../package.json');
@@ -144,7 +144,7 @@ if (
     ownNodeModules: resolveOwn('node_modules'),
     appTypeDeclarations: resolveOwn(`${templatePath}/src/react-app-env.d.ts`),
     ownTypeDeclarations: resolveOwn('lib/react-app.d.ts'),
-    cacheLoaderDir: resolveOwn('.cache/cache-loader')
+    cacheLoaderDir: resolveOwn('.cache/cache-loader'),
   };
 }
 // @remove-on-eject-end
