@@ -1,6 +1,6 @@
 # `backpack-react-scripts` Change Log
 
-## 9.0.4
+## 9.1.0
 
 Add `cache-loader` to speed up local development
 
