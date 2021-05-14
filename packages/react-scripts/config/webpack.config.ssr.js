@@ -147,6 +147,12 @@ module.exports = function (webpackEnv) {
           ? { publicPath: '../../' }
           : {},
       },
+      // isEnvDevelopment && {
+      //   loader: require.resolve('cache-loader'),
+      //   options: {
+      //     cacheDirectory: paths.cacheLoaderDir,
+      //   },
+      // },
       {
         loader: require.resolve('css-loader'),
         options: cssOptions,
@@ -483,6 +489,12 @@ module.exports = function (webpackEnv) {
                 //   loader: require.resolve('thread-loader'),
                 //   options: jsWorkerPool,
                 // },
+                // isEnvDevelopment && {
+                //   loader: require.resolve('cache-loader'),
+                //   options: {
+                //     cacheDirectory: paths.cacheLoaderDir,
+                //   },
+                // },
                 {
                   loader: require.resolve('babel-loader'),
                   options: {
@@ -542,7 +554,7 @@ module.exports = function (webpackEnv) {
                     compact: isEnvProduction,
                   },
                 },
-              ],
+              ].filter(Boolean),
             },
             // Process any JS outside of the app with Babel.
             // Unlike the application JS, we only compile the standard ES features.
@@ -553,6 +565,12 @@ module.exports = function (webpackEnv) {
                 // {
                 //   loader: require.resolve('thread-loader'),
                 //   options: jsWorkerPool,
+                // },
+                // isEnvDevelopment && {
+                //   loader: require.resolve('cache-loader'),
+                //   options: {
+                //     cacheDirectory: paths.cacheLoaderDir,
+                //   },
                 // },
                 {
                   loader: require.resolve('babel-loader'),
@@ -589,7 +607,7 @@ module.exports = function (webpackEnv) {
                     inputSourceMap: shouldUseSourceMap,
                   },
                 },
-              ],
+              ].filter(Boolean),
             },
             // "postcss" loader applies autoprefixer to our CSS.
             // "css" loader resolves paths in CSS and adds assets as dependencies.

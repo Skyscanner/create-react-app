@@ -1,8 +1,9 @@
 # `backpack-react-scripts` Change Log
 
-## 9.1.1
+## 9.1.0 - UNRELEASED
 
 - Add `thread-loader` to speed up webpack workflow by bundling in parallels
+- Add `cache-loader` to speed up local development
 
 ## 9.0.3
 

@@ -151,6 +151,12 @@ module.exports = function (webpackEnv) {
           ? { publicPath: '../../' }
           : {},
       },
+      isEnvDevelopment && {
+        loader: require.resolve('cache-loader'),
+        options: {
+          cacheDirectory: paths.cacheLoaderDir,
+        },
+      },
       {
         loader: require.resolve('css-loader'),
         options: cssOptions,
@@ -481,11 +487,17 @@ module.exports = function (webpackEnv) {
                   loader: require.resolve('thread-loader'),
                   options: jsWorkerPool,
                 },
+                isEnvDevelopment && {
+                  loader: require.resolve('cache-loader'),
+                  options: {
+                    cacheDirectory: paths.cacheLoaderDir,
+                  },
+                },
                 {
                   loader: require.resolve('babel-loader'),
                   options: {
                     customize: require.resolve(
-                      'babel-preset-react-app/webpack-overrides'
+                      'babel-preset-react-app/webpack-overrides',
                     ),
                     presets: [
                       [
@@ -512,7 +524,7 @@ module.exports = function (webpackEnv) {
                         'babel-preset-react-app',
                         'react-dev-utils',
                         'react-scripts',
-                      ]
+                      ],
                     ),
                     // @remove-on-eject-end
                     plugins: [
@@ -540,7 +552,7 @@ module.exports = function (webpackEnv) {
                     compact: isEnvProduction,
                   },
                 },
-              ],
+              ].filter(Boolean),
             },
             // Process any JS outside of the app with Babel.
             // Unlike the application JS, we only compile the standard ES features.
@@ -551,6 +563,12 @@ module.exports = function (webpackEnv) {
                 {
                   loader: require.resolve('thread-loader'),
                   options: jsWorkerPool,
+                },
+                isEnvDevelopment && {
+                  loader: require.resolve('cache-loader'),
+                  options: {
+                    cacheDirectory: paths.cacheLoaderDir,
+                  },
                 },
                 {
                   loader: require.resolve('babel-loader'),
@@ -577,7 +595,7 @@ module.exports = function (webpackEnv) {
                         'babel-preset-react-app',
                         'react-dev-utils',
                         'react-scripts',
-                      ]
+                      ],
                     ),
                     // @remove-on-eject-end
                     // Babel sourcemaps are needed for debugging into node_modules
@@ -587,7 +605,7 @@ module.exports = function (webpackEnv) {
                     inputSourceMap: shouldUseSourceMap,
                   },
                 },
-              ],
+              ].filter(Boolean),
             },
             // "postcss" loader applies autoprefixer to our CSS.
             // "css" loader resolves paths in CSS and adds assets as dependencies.
