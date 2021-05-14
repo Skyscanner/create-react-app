@@ -1,5 +1,9 @@
 # `backpack-react-scripts` Change Log
 
+## 9.1.1
+
+- Add `thread-loader` to speed up webpack workflow by bundling in parallels
+
 ## 9.0.3
 
 - Rebased onto `upstream/master` v4.0.3 (f92c37a6e6636ed1650ffd976c6881f59b1be803)
