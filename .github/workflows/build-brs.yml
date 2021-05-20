@@ -36,11 +36,13 @@ jobs:
       #   run: |
       #     nvm use lts/erbium
       #     tasks/e2e-kitchensink.sh
+
       # - name: Run Kitchensink Eject
       #   shell: bash -l {0}
       #   run: |
       #     nvm use lts/erbium
       #     tasks/e2e-kitchensink-eject.sh
+
       # - name: Run Behaviour
       #   shell: bash -l {0}
       #   run: |
