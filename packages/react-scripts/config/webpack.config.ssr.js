@@ -113,6 +113,7 @@ const hasJsxRuntime = (() => {
 // Backpack / saddlebag node module regexes
 const backpackModulesRegex = /node_modules[\\/]bpk-/;
 const saddlebagModulesRegex = /node_modules[\\/]saddlebag-/;
+const scopedBackpackModulesRegex = /node_modules[\\/]@skyscanner[\\/]bpk-/;
 
 // This is the production and development configuration.
 // It is focused on developer experience, fast rebuilds, and a minimal bundle.
@@ -532,9 +533,9 @@ module.exports = function (webpackEnv) {
                     },
                   ],
                   isEnvDevelopment &&
-                  shouldUseReactRefresh &&
-                  require.resolve('react-refresh/babel'),
-              ].filter(Boolean),
+                    shouldUseReactRefresh &&
+                    require.resolve('react-refresh/babel'),
+                ].filter(Boolean),
                 // This is a feature of `babel-loader` for webpack (not Babel itself).
                 // It enables caching results in ./node_modules/.cache/babel-loader/
                 // directory for faster rebuilds.
@@ -613,9 +614,9 @@ module.exports = function (webpackEnv) {
                         },
                       ],
                       isEnvDevelopment &&
-                      shouldUseReactRefresh &&
-                      require.resolve('react-refresh/babel'),
-                  ].filter(Boolean),
+                        shouldUseReactRefresh &&
+                        require.resolve('react-refresh/babel'),
+                    ].filter(Boolean),
                     // This is a feature of `babel-loader` for webpack (not Babel itself).
                     // It enables caching results in ./node_modules/.cache/babel-loader/
                     // directory for faster rebuilds.
@@ -715,7 +716,7 @@ module.exports = function (webpackEnv) {
               ],
               use: getStyleLoaders({
                 importLoaders: 1,
-                sourceMap: isEnvProduction 
+                sourceMap: isEnvProduction
                   ? shouldUseSourceMap
                   : isEnvDevelopment,
                 modules: {
@@ -735,9 +736,9 @@ module.exports = function (webpackEnv) {
               use: getStyleLoaders(
                 {
                   importLoaders: 3,
-                  sourceMap: isEnvProduction 
-                  ? shouldUseSourceMap
-                  : isEnvDevelopment,
+                  sourceMap: isEnvProduction
+                    ? shouldUseSourceMap
+                    : isEnvDevelopment,
                 },
                 'sass-loader',
                 {
@@ -870,7 +871,7 @@ module.exports = function (webpackEnv) {
       new webpack.DefinePlugin(env.stringified),
       // This is necessary to emit hot updates (CSS and Fast Refresh):
       isEnvDevelopment && new webpack.HotModuleReplacementPlugin(),
-            // Experimental hot reloading for React .
+      // Experimental hot reloading for React .
       // https://github.com/facebook/react/tree/master/packages/react-refresh
       isEnvDevelopment &&
         shouldUseReactRefresh &&
@@ -982,24 +983,24 @@ module.exports = function (webpackEnv) {
           // The formatter is invoked directly in WebpackDevServerUtils during development
           formatter: isEnvProduction ? typescriptFormatter : undefined,
         }),
-        // new ESLintPlugin({
-        //   // Plugin options
-        //   extensions: ['js', 'mjs', 'jsx', 'ts', 'tsx'],
-        //   formatter: require.resolve('react-dev-utils/eslintFormatter'),
-        //   eslintPath: require.resolve('eslint'),
-        //   context: paths.appSrc,
-        //   // ESLint class options
-        //   cwd: paths.appPath,
-        //   resolvePluginsRelativeTo: __dirname,
-        //   baseConfig: {
-        //     extends: [require.resolve('eslint-config-react-app/base')],
-        //     rules: {
-        //       ...(!hasJsxRuntime && {
-        //         'react/react-in-jsx-scope': 'error',
-        //       }),
-        //     },
-        //   },
-        // }),
+      // new ESLintPlugin({
+      //   // Plugin options
+      //   extensions: ['js', 'mjs', 'jsx', 'ts', 'tsx'],
+      //   formatter: require.resolve('react-dev-utils/eslintFormatter'),
+      //   eslintPath: require.resolve('eslint'),
+      //   context: paths.appSrc,
+      //   // ESLint class options
+      //   cwd: paths.appPath,
+      //   resolvePluginsRelativeTo: __dirname,
+      //   baseConfig: {
+      //     extends: [require.resolve('eslint-config-react-app/base')],
+      //     rules: {
+      //       ...(!hasJsxRuntime && {
+      //         'react/react-in-jsx-scope': 'error',
+      //       }),
+      //     },
+      //   },
+      // }),
     ].filter(Boolean),
     // Some libraries import Node modules but don't use them in the browser.
     // Tell webpack to provide empty mocks for them so importing them works.

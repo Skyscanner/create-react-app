@@ -1,5 +1,9 @@
 # `backpack-react-scripts` Change Log
 
+## 9.1.2
+
+- Updated webpack paths to include the new `@skyscanner/bpk` foundations packages.
+
 ## 9.1.1
 
 - Optimize the usage of `thread-loader` to fix `build:storybook` running failed
