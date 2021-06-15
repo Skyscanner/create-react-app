@@ -17,7 +17,7 @@ const PnpWebpackPlugin = require('pnp-webpack-plugin');
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
 // const InlineChunkHtmlPlugin = require('react-dev-utils/InlineChunkHtmlPlugin');
 // const TerserPlugin = require('terser-webpack-plugin');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+// const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 // const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 // const safePostCssParser = require('postcss-safe-parser');
 // const ManifestPlugin = require('webpack-manifest-plugin');
@@ -35,6 +35,8 @@ const typescriptFormatter = require('react-dev-utils/typescriptFormatter');
 const getCacheIdentifier = require('react-dev-utils/getCacheIdentifier');
 // @remove-on-eject-end
 
+const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
+const LoadablePlugin = require('@loadable/webpack-plugin');
 const sassFunctions = require('bpk-mixins/sass-functions');
 // const camelCase = require('lodash/camelCase');
 const pkgJson = require(paths.appPackageJson);
@@ -54,6 +56,10 @@ const shouldUseSourceMap = process.env.GENERATE_SOURCEMAP !== 'false';
 // Some apps do not need the benefits of saving a web request, so not inlining the chunk
 // makes for a smoother build process.
 // const shouldInlineRuntimeChunk = process.env.INLINE_RUNTIME_CHUNK !== 'false';
+// We might not want to use the hard source plugin on environments that won't persist the cache for later
+const useHardSourceWebpackPlugin =
+  process.env.USE_HARD_SOURCE_WEBPACK_PLUGIN === 'true';
+const environmentHash = require('./environmentHash');
 
 // Check if TypeScript is setup
 const useTypeScript = fs.existsSync(paths.appTsConfig);
@@ -67,6 +73,7 @@ const sassModuleRegex = /\.module\.(scss|sass)$/;
 // Backpack / saddlebag node module regexes
 const backpackModulesRegex = /node_modules[\\/]bpk-/;
 const saddlebagModulesRegex = /node_modules[\\/]saddlebag-/;
+const scopedBackpackModulesRegex = /node_modules[\\/]@skyscanner[\\/]bpk-/;
 
 // This is the production and development configuration.
 // It is focused on developer experience, fast rebuilds, and a minimal bundle.
@@ -82,7 +89,7 @@ module.exports = function(webpackEnv) {
     : isEnvDevelopment && '/';
   // Some apps do not use client-side routing with pushState.
   // For these, "homepage" can be set to "." to enable relative asset paths.
-  const shouldUseRelativeAssetPaths = publicPath === './';
+  // const shouldUseRelativeAssetPaths = publicPath === './';
 
   // `publicUrl` is just like `publicPath`, but we will provide it to our app
   // as %PUBLIC_URL% in `index.html` and `process.env.PUBLIC_URL` in JavaScript.
@@ -100,16 +107,16 @@ module.exports = function(webpackEnv) {
     preProcessorOptions = {}
   ) => {
     const loaders = [
-      isEnvDevelopment && require.resolve('style-loader'),
-      isEnvProduction && {
-        loader: MiniCssExtractPlugin.loader,
-        options: Object.assign(
-          {},
-          shouldUseRelativeAssetPaths ? { publicPath: '../../' } : undefined
-        ),
-      },
+      // isEnvDevelopment && require.resolve('style-loader'),
+      // isEnvProduction && {
+      //   loader: MiniCssExtractPlugin.loader,
+      //   options: Object.assign(
+      //     {},
+      //     shouldUseRelativeAssetPaths ? { publicPath: '../../' } : undefined
+      //   ),
+      // },
       {
-        loader: require.resolve('css-loader'),
+        loader: require.resolve('css-loader/locals'),
         options: cssOptions,
       },
       {
@@ -171,8 +178,8 @@ module.exports = function(webpackEnv) {
       // the line below with these two lines if you prefer the stock client:
       // require.resolve('webpack-dev-server/client') + '?/',
       // require.resolve('webpack/hot/dev-server'),
-      isEnvDevelopment &&
-        require.resolve('react-dev-utils/webpackHotDevClient'),
+      // isEnvDevelopment &&
+      //   require.resolve('react-dev-utils/webpackHotDevClient'),
       // Finally, this is your app's code:
       // paths.appIndexJs,
       paths.appSsrJs,
@@ -182,7 +189,7 @@ module.exports = function(webpackEnv) {
     ].filter(Boolean),
     output: {
       // The build folder.
-      path: isEnvProduction ? paths.appBuild : undefined,
+      path: paths.appBuildSsr,
       // Add /* filename */ comments to generated require()s in the output.
       pathinfo: isEnvDevelopment,
       // There will be one main bundle, and one file per asynchronous chunk.
@@ -190,12 +197,12 @@ module.exports = function(webpackEnv) {
       // filename: isEnvProduction
       //   ? 'static/js/[name].[chunkhash:8].js'
       //   : isEnvDevelopment && 'static/js/bundle.js',
-      filename: 'ssr.js',
+      filename: 'ssr.[hash:8].js',
       libraryTarget: 'commonjs2',
       // There are also additional JS chunk files if you use code splitting.
       chunkFilename: isEnvProduction
         ? 'static/js/[name].[chunkhash:8].chunk.js'
-        : isEnvDevelopment && 'static/js/[name].chunk.js',
+        : isEnvDevelopment && 'static/js/[name].[chunkhash:8].chunk.js',
       // We inferred the "public path" (such as / or /my-project) from homepage.
       // We use "/" in development.
       publicPath: publicPath,
@@ -344,6 +351,7 @@ module.exports = function(webpackEnv) {
       ],
     },
     module: {
+      noParse: /iconv-loader\.js$/, // https://github.com/webpack/webpack/issues/3078#issuecomment-400697407
       strictExportPresence: true,
       rules: [
         // Disable require.ensure as it's not a standard language feature.
@@ -407,6 +415,7 @@ module.exports = function(webpackEnv) {
                 paths.appSrc,
                 backpackModulesRegex,
                 saddlebagModulesRegex,
+                scopedBackpackModulesRegex,
                 ...customModuleRegexes,
               ],
               loader: require.resolve('babel-loader'),
@@ -436,6 +445,7 @@ module.exports = function(webpackEnv) {
                 ),
                 // @remove-on-eject-end
                 plugins: [
+                  require.resolve('@loadable/babel-plugin'),
                   [
                     require.resolve('babel-plugin-named-asset-import'),
                     {
@@ -504,7 +514,7 @@ module.exports = function(webpackEnv) {
             {
               test: {
                 and: [cssRegex, () => !cssModulesEnabled],
-                exclude: [backpackModulesRegex],
+                exclude: [backpackModulesRegex, scopedBackpackModulesRegex],
               },
               exclude: cssModuleRegex,
               use: getStyleLoaders({
@@ -526,7 +536,7 @@ module.exports = function(webpackEnv) {
                   and: [cssRegex, () => cssModulesEnabled],
                 },
                 {
-                  and: [cssRegex, backpackModulesRegex],
+                  and: [cssRegex, backpackModulesRegex, scopedBackpackModulesRegex],
                 },
               ],
               use: getStyleLoaders({
@@ -542,7 +552,7 @@ module.exports = function(webpackEnv) {
             {
               test: {
                 and: [sassRegex, () => !cssModulesEnabled],
-                exclude: [backpackModulesRegex],
+                exclude: [backpackModulesRegex, scopedBackpackModulesRegex],
               },
               exclude: sassModuleRegex,
               use: getStyleLoaders(
@@ -570,7 +580,7 @@ module.exports = function(webpackEnv) {
                   and: [sassRegex, () => cssModulesEnabled],
                 },
                 {
-                  and: [sassRegex, backpackModulesRegex],
+                  and: [sassRegex, backpackModulesRegex, scopedBackpackModulesRegex],
                 },
               ],
               use: getStyleLoaders(
@@ -609,6 +619,20 @@ module.exports = function(webpackEnv) {
       ],
     },
     plugins: [
+      useHardSourceWebpackPlugin &&
+        new HardSourceWebpackPlugin({ environmentHash }),
+      useHardSourceWebpackPlugin &&
+        new HardSourceWebpackPlugin.ExcludeModulePlugin([
+          {
+            // HardSource works with mini-css-extract-plugin but due to how
+            // mini-css emits assets, assets are not emitted on repeated builds with
+            // mini-css and hard-source together. Ignoring the mini-css loader
+            // modules, but not the other css loader modules, excludes the modules
+            // that mini-css needs rebuilt to output assets every time.
+            test: /mini-css-extract-plugin[\\/]dist[\\/]loader/,
+          },
+        ]),
+      new LoadablePlugin(),
       // Generates an `index.html` file with the <script> injected.
       // new HtmlWebpackPlugin(
       //   Object.assign(
@@ -655,9 +679,12 @@ module.exports = function(webpackEnv) {
       // It is absolutely essential that NODE_ENV is set to production
       // during a production build.
       // Otherwise React will be compiled in the very slow development mode.
-      new webpack.DefinePlugin(env.stringified),
+      new webpack.DefinePlugin({
+        ...env.stringified,
+        'typeof window': '"undefined"',
+      }),
       // This is necessary to emit hot updates (currently CSS only):
-      isEnvDevelopment && new webpack.HotModuleReplacementPlugin(),
+      // isEnvDevelopment && new webpack.HotModuleReplacementPlugin(),
       // Watcher doesn't work well if you mistype casing in a path so we use
       // a plugin that prints an error when you attempt to do this.
       // See https://github.com/facebook/create-react-app/issues/240
@@ -668,14 +695,15 @@ module.exports = function(webpackEnv) {
       // See https://github.com/facebook/create-react-app/issues/186
       isEnvDevelopment &&
         new WatchMissingNodeModulesPlugin(paths.appNodeModules),
-      isEnvProduction &&
-        new MiniCssExtractPlugin({
-          // Options similar to the same options in webpackOptions.output
-          // both options are optional
-          // filename: 'static/css/[name].[contenthash:8].css',
-          filename: 'ssr.css',
-          // chunkFilename: 'static/css/[name].[contenthash:8].chunk.css',
-        }),
+      // isEnvProduction &&
+      //   new MiniCssExtractPlugin({
+      //     // Options similar to the same options in webpackOptions.output
+      //     // both options are optional
+      //     // filename: 'static/css/[name].[contenthash:8].css',
+      //     filename: 'ssr.css',
+      //     // chunkFilename: 'static/css/[name].[contenthash:8].chunk.css',
+      //     // ignoreOrder: true,
+      //   }),
       // Generate a manifest file which contains a mapping of all asset filenames
       // to their corresponding output file so that tools can pick it up without
       // having to parse `index.html`.

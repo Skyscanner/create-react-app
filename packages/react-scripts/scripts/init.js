@@ -96,6 +96,7 @@ module.exports = function(
   // Setup the script rules
   appPackage.scripts = {
     start: 'react-scripts start',
+    'start-ssr': 'react-scripts start-ssr',
     build: 'react-scripts build',
     test: 'react-scripts test',
     eject: 'react-scripts eject',
