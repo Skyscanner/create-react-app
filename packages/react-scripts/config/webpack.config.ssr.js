@@ -73,6 +73,7 @@ const sassModuleRegex = /\.module\.(scss|sass)$/;
 // Backpack / saddlebag node module regexes
 const backpackModulesRegex = /node_modules[\\/]bpk-/;
 const saddlebagModulesRegex = /node_modules[\\/]saddlebag-/;
+const scopedBackpackModulesRegex = /node_modules[\\/]@skyscanner[\\/]bpk-/;
 
 // This is the production and development configuration.
 // It is focused on developer experience, fast rebuilds, and a minimal bundle.
@@ -414,6 +415,7 @@ module.exports = function(webpackEnv) {
                 paths.appSrc,
                 backpackModulesRegex,
                 saddlebagModulesRegex,
+                scopedBackpackModulesRegex,
                 ...customModuleRegexes,
               ],
               loader: require.resolve('babel-loader'),
@@ -512,7 +514,7 @@ module.exports = function(webpackEnv) {
             {
               test: {
                 and: [cssRegex, () => !cssModulesEnabled],
-                exclude: [backpackModulesRegex],
+                exclude: [backpackModulesRegex, scopedBackpackModulesRegex],
               },
               exclude: cssModuleRegex,
               use: getStyleLoaders({
@@ -534,7 +536,7 @@ module.exports = function(webpackEnv) {
                   and: [cssRegex, () => cssModulesEnabled],
                 },
                 {
-                  and: [cssRegex, backpackModulesRegex],
+                  and: [cssRegex, backpackModulesRegex, scopedBackpackModulesRegex],
                 },
               ],
               use: getStyleLoaders({
@@ -550,7 +552,7 @@ module.exports = function(webpackEnv) {
             {
               test: {
                 and: [sassRegex, () => !cssModulesEnabled],
-                exclude: [backpackModulesRegex],
+                exclude: [backpackModulesRegex, scopedBackpackModulesRegex],
               },
               exclude: sassModuleRegex,
               use: getStyleLoaders(
@@ -578,7 +580,7 @@ module.exports = function(webpackEnv) {
                   and: [sassRegex, () => cssModulesEnabled],
                 },
                 {
-                  and: [sassRegex, backpackModulesRegex],
+                  and: [sassRegex, backpackModulesRegex, scopedBackpackModulesRegex],
                 },
               ],
               use: getStyleLoaders(

@@ -1,7 +1,8 @@
 # `backpack-react-scripts` Change Log
 
-## 8.0.0 (Pending)
+## 8.1.0 (Pending)
 
+- BACKPORT: Added support for Backpack Foundations.
 - Added support for loadable components.
 - Added `start-ssr` command, to produce Node.js-compatible watched output. Several changes to SSR Webpack config to support.
 - Defined `typeof window` for browser and SSR environments, enabling dead code elimination (https://webpack.js.org/plugins/define-plugin/#usage)
