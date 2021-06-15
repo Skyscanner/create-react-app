@@ -1,5 +1,20 @@
 # `backpack-react-scripts` Change Log
 
+## 8.1.0 (Pending)
+
+- Added support for loadable components.
+- Added `start-ssr` command, to produce Node.js-compatible watched output. Several changes to SSR Webpack config to support.
+- Defined `typeof window` for browser and SSR environments, enabling dead code elimination (https://webpack.js.org/plugins/define-plugin/#usage)
+- SSR output always includes hash as part of filename
+- Added experimental support for https://github.com/mzgoddard/hard-source-webpack-plugin/, enabled by `USE_HARD_SOURCE_WEBPACK_PLUGIN=true` environment variable
+- `web` and `ssr` subpaths for each build's output
+- Output build 'status files' (`.build-status`, one for web, one for SSR), which can be watched by a Node.js server to know when builds are in progress or completed.
+- Added `ignoreCssWarnings` config item to allow the ability to supress CSS ordering issues when its safe to allow mixed order when it has not effect on output. https://github.com/webpack-contrib/mini-css-extract-plugin#remove-order-warnings
+
+## 8.0.6
+
+- BACKPORT: Updated webpack paths to include the new `@skyscanner/bpk` foundations packages.
+
 ## 8.0.4
 
 - Updated `bpk-mixins` to latest version `20.1.5`
@@ -11,7 +26,8 @@
 - Downgraded `sass-loader` to `7.3.1` due to issues with `node-sass` and functional changes to options.
 
 Rebased onto `upstream/master` v3.4.4 (6c009edface3ed63d0c7046f088c675a63c82fdb)
-  - Update `resolve-url-loader` to `3.1.2` to resolve security vunerability
+
+- Update `resolve-url-loader` to `3.1.2` to resolve security vunerability
 
 ## 8.0.2
 

@@ -48,6 +48,8 @@ const paths = require('../config/paths');
 const configFactory = require('../config/webpack.config');
 const createDevServerConfig = require('../config/webpackDevServer.config');
 
+const statusFile = require('./utils/statusFile');
+
 const useYarn = fs.existsSync(paths.yarnLockFile);
 const isInteractive = process.stdout.isTTY;
 
@@ -120,6 +122,9 @@ checkBrowsers(paths.appPath, isInteractive)
       tscCompileOnError,
       webpack,
     });
+
+    statusFile.init(compiler, paths.appBuildWeb);
+
     // Load proxy config
     const proxySetting = require(paths.appPackageJson).proxy;
     const proxyConfig = prepareProxy(
@@ -132,6 +137,11 @@ checkBrowsers(paths.appPath, isInteractive)
       proxyConfig,
       urls.lanUrlForConfig
     );
+
+    serverConfig.writeToDisk = filePath => {
+      return /loadable-stats\.json/.test(filePath);
+    };
+
     const devServer = new WebpackDevServer(compiler, serverConfig);
     // Launch WebpackDevServer.
     devServer.listen(port, HOST, err => {

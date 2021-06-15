@@ -40,23 +40,32 @@ const postcssNormalize = require('postcss-normalize');
 
 const appPackageJson = require(paths.appPackageJson);
 
+const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
+const LoadablePlugin = require('@loadable/webpack-plugin');
+
 const sassFunctions = require('bpk-mixins/sass-functions');
 const camelCase = require('lodash/camelCase');
 const bpkReactScriptsConfig = appPackageJson['backpack-react-scripts'] || {};
 const customModuleRegexes = bpkReactScriptsConfig.babelIncludePrefixes
   ? bpkReactScriptsConfig.babelIncludePrefixes.map(
-      prefix => new RegExp(`node_modules[\\/]${prefix}`)
+      (prefix) => new RegExp(`node_modules[\\/]${prefix}`)
     )
   : [];
 const cssModulesEnabled = bpkReactScriptsConfig.cssModules !== false;
 const crossOriginLoading = bpkReactScriptsConfig.crossOriginLoading || false;
 const sriEnabled = bpkReactScriptsConfig.sriEnabled || false;
+const supressCssWarnings = bpkReactScriptsConfig.ignoreCssWarnings || false;
 
 // Source maps are resource heavy and can cause out of memory issue for large source files.
 const shouldUseSourceMap = process.env.GENERATE_SOURCEMAP !== 'false';
 // Some apps do not need the benefits of saving a web request, so not inlining the chunk
 // makes for a smoother build process.
 const shouldInlineRuntimeChunk = process.env.INLINE_RUNTIME_CHUNK !== 'false';
+
+// We might not want to use the hard source plugin on environments that won't persist the cache for later
+const useHardSourceWebpackPlugin =
+  process.env.USE_HARD_SOURCE_WEBPACK_PLUGIN === 'true';
+const environmentHash = require('./environmentHash');
 
 // const isExtendingEslintConfig = process.env.EXTEND_ESLINT === 'true';
 
@@ -76,10 +85,11 @@ const sassModuleRegex = /\.module\.(scss|sass)$/;
 // Backpack / saddlebag node module regexes
 const backpackModulesRegex = /node_modules[\\/]bpk-/;
 const saddlebagModulesRegex = /node_modules[\\/]saddlebag-/;
+const scopedBackpackModulesRegex = /node_modules[\\/]@skyscanner[\\/]bpk-/;
 
 // This is the production and development configuration.
 // It is focused on developer experience, fast rebuilds, and a minimal bundle.
-module.exports = function(webpackEnv) {
+module.exports = function (webpackEnv) {
   const isEnvDevelopment = webpackEnv === 'development';
   const isEnvProduction = webpackEnv === 'production';
 
@@ -195,7 +205,7 @@ module.exports = function(webpackEnv) {
     output: {
       crossOriginLoading: sriEnabled ? 'anonymous' : crossOriginLoading,
       // The build folder.
-      path: isEnvProduction ? paths.appBuild : undefined,
+      path: paths.appBuildWeb,
       // Add /* filename */ comments to generated require()s in the output.
       pathinfo: isEnvDevelopment,
       // There will be one main bundle, and one file per asynchronous chunk.
@@ -215,12 +225,13 @@ module.exports = function(webpackEnv) {
       publicPath: paths.publicUrlOrPath,
       // Point sourcemap entries to original disk location (format as URL on Windows)
       devtoolModuleFilenameTemplate: isEnvProduction
-        ? info =>
+        ? (info) =>
             path
               .relative(paths.appSrc, info.absoluteResourcePath)
               .replace(/\\/g, '/')
         : isEnvDevelopment &&
-          (info => path.resolve(info.absoluteResourcePath).replace(/\\/g, '/')),
+          ((info) =>
+            path.resolve(info.absoluteResourcePath).replace(/\\/g, '/')),
       // Prevents conflicts when multiple webpack runtimes (from different apps)
       // are used on the same page.
       // jsonpFunction: `webpackJsonp${appPackageJson.name}`,
@@ -321,7 +332,7 @@ module.exports = function(webpackEnv) {
       // },
       runtimeChunk: bpkReactScriptsConfig.enableAutomaticChunking
         ? {
-            name: entrypoint => `runtime-${entrypoint.name}`,
+            name: (entrypoint) => `runtime-${entrypoint.name}`,
           }
         : false,
     },
@@ -341,8 +352,8 @@ module.exports = function(webpackEnv) {
       // `web` extension prefixes have been added for better support
       // for React Native Web.
       extensions: paths.moduleFileExtensions
-        .map(ext => `.${ext}`)
-        .filter(ext => useTypeScript || !ext.includes('ts')),
+        .map((ext) => `.${ext}`)
+        .filter((ext) => useTypeScript || !ext.includes('ts')),
       alias: {
         // Support React Native Web
         // https://www.smashingmagazine.com/2016/08/a-glimpse-into-the-future-with-react-native-for-web/
@@ -374,6 +385,7 @@ module.exports = function(webpackEnv) {
       ],
     },
     module: {
+      noParse: /iconv-loader\.js$/, // https://github.com/webpack/webpack/issues/3078#issuecomment-400697407
       strictExportPresence: true,
       rules: [
         // Disable require.ensure as it's not a standard language feature.
@@ -440,6 +452,7 @@ module.exports = function(webpackEnv) {
                 paths.appSrc,
                 backpackModulesRegex,
                 saddlebagModulesRegex,
+                scopedBackpackModulesRegex,
                 ...customModuleRegexes,
               ],
               loader: require.resolve('babel-loader'),
@@ -469,6 +482,7 @@ module.exports = function(webpackEnv) {
                 ),
                 // @remove-on-eject-end
                 plugins: [
+                  require.resolve('@loadable/babel-plugin'),
                   [
                     require.resolve('babel-plugin-named-asset-import'),
                     {
@@ -539,7 +553,7 @@ module.exports = function(webpackEnv) {
             {
               test: {
                 and: [cssRegex, () => !cssModulesEnabled],
-                exclude: [backpackModulesRegex],
+                exclude: [backpackModulesRegex, scopedBackpackModulesRegex],
               },
               exclude: cssModuleRegex,
               use: getStyleLoaders({
@@ -561,7 +575,11 @@ module.exports = function(webpackEnv) {
                   and: [cssRegex, () => cssModulesEnabled],
                 },
                 {
-                  and: [cssRegex, backpackModulesRegex],
+                  and: [
+                    cssRegex,
+                    backpackModulesRegex,
+                    scopedBackpackModulesRegex,
+                  ],
                 },
               ],
               use: getStyleLoaders({
@@ -578,7 +596,7 @@ module.exports = function(webpackEnv) {
             {
               test: {
                 and: [sassRegex, () => !cssModulesEnabled],
-                exclude: [backpackModulesRegex],
+                exclude: [backpackModulesRegex, scopedBackpackModulesRegex],
               },
               exclude: sassModuleRegex,
               use: getStyleLoaders(
@@ -606,7 +624,11 @@ module.exports = function(webpackEnv) {
                   and: [sassRegex, () => cssModulesEnabled],
                 },
                 {
-                  and: [sassRegex, backpackModulesRegex],
+                  and: [
+                    sassRegex,
+                    backpackModulesRegex,
+                    scopedBackpackModulesRegex,
+                  ],
                 },
               ],
               use: getStyleLoaders(
@@ -646,6 +668,20 @@ module.exports = function(webpackEnv) {
       ],
     },
     plugins: [
+      useHardSourceWebpackPlugin &&
+        new HardSourceWebpackPlugin({ environmentHash }),
+      useHardSourceWebpackPlugin &&
+        new HardSourceWebpackPlugin.ExcludeModulePlugin([
+          {
+            // HardSource works with mini-css-extract-plugin but due to how
+            // mini-css emits assets, assets are not emitted on repeated builds with
+            // mini-css and hard-source together. Ignoring the mini-css loader
+            // modules, but not the other css loader modules, excludes the modules
+            // that mini-css needs rebuilt to output assets every time.
+            test: /mini-css-extract-plugin[\\/]dist[\\/]loader/,
+          },
+        ]),
+      new LoadablePlugin(),
       // Generates an `index.html` file with the <script> injected.
       new HtmlWebpackPlugin(
         Object.assign(
@@ -712,7 +748,10 @@ module.exports = function(webpackEnv) {
       // It is absolutely essential that NODE_ENV is set to production
       // during a production build.
       // Otherwise React will be compiled in the very slow development mode.
-      new webpack.DefinePlugin(env.stringified),
+      new webpack.DefinePlugin({
+        ...env.stringified,
+        'typeof window': '"object"',
+      }),
       // This is necessary to emit hot updates (currently CSS only):
       isEnvDevelopment && new webpack.HotModuleReplacementPlugin(),
       // Watcher doesn't work well if you mistype casing in a path so we use
@@ -731,6 +770,7 @@ module.exports = function(webpackEnv) {
           // both options are optional
           filename: 'static/css/[name].[contenthash:8].css',
           chunkFilename: 'static/css/[name].[contenthash:8].chunk.css',
+          ignoreOrder: supressCssWarnings,
         }),
       // Generate an asset manifest file with the following content:
       // - "files" key: Mapping of all asset filenames to their corresponding
@@ -747,7 +787,7 @@ module.exports = function(webpackEnv) {
             return manifest;
           }, seed);
           const entrypointFiles = entrypoints.main.filter(
-            fileName => !fileName.endsWith('.map')
+            (fileName) => !fileName.endsWith('.map')
           );
 
           return {

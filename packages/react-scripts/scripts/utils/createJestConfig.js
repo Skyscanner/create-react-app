@@ -16,6 +16,7 @@ const pkgJson = require(paths.appPackageJson);
 const bpkReactScriptsConfig = pkgJson['backpack-react-scripts'] || {};
 
 const includePrefixes = bpkReactScriptsConfig.babelIncludePrefixes || [];
+includePrefixes.unshift('@skyscanner/bpk-');
 includePrefixes.unshift('bpk-');
 includePrefixes.unshift('saddlebag-');
 
