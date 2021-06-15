@@ -1,6 +1,6 @@
 # `backpack-react-scripts` Change Log
 
-## 8.1.0 (Pending)
+## 7.1.0 (Pending)
 
 - BACKPORT: Added support for Backpack Foundations.
 - Added support for loadable components.
