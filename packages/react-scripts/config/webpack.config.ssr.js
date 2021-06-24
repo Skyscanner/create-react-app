@@ -8,6 +8,10 @@
 // @remove-on-eject-end
 'use strict';
 
+// We need to disable React Refresh, because we don't use a DevServer for SSR
+// builds. The least intrusive way to do that is to use CRA's FAST_REFRESH option.
+process.env.FAST_REFRESH = 'false';
+
 const fs = require('fs');
 const path = require('path');
 const webpack = require('webpack');
@@ -164,11 +168,8 @@ module.exports = function (webpackEnv) {
       //   },
       // },
       {
-        // In v3.0.0 css-loader/locals was removed in favour of onlyLocals option
-        // So adding the option here in replacement as per
-        // https://github.com/webpack-contrib/css-loader/tree/v3.4.2#onlylocals
         loader: require.resolve('css-loader'),
-        options: { ...cssOptions, onlyLocals: true },
+        options: cssOptions,
       },
       {
         // Options for PostCSS as we reference these options twice
@@ -709,6 +710,9 @@ module.exports = function (webpackEnv) {
                 sourceMap: isEnvProduction
                   ? shouldUseSourceMap
                   : isEnvDevelopment,
+                modules: {
+                  exportOnlyLocals: true,
+                },
               }),
               // Don't consider CSS imports dead code even if the
               // containing package claims to have no side effects.
@@ -739,6 +743,7 @@ module.exports = function (webpackEnv) {
                   : isEnvDevelopment,
                 modules: {
                   getLocalIdent: getCSSModuleLocalIdent,
+                  exportOnlyLocals: true,
                 },
               }),
             },
@@ -757,6 +762,9 @@ module.exports = function (webpackEnv) {
                   sourceMap: isEnvProduction
                     ? shouldUseSourceMap
                     : isEnvDevelopment,
+                  modules: {
+                    exportOnlyLocals: true,
+                  },
                 },
                 'sass-loader',
                 {
@@ -793,6 +801,7 @@ module.exports = function (webpackEnv) {
                     : isEnvDevelopment,
                   modules: {
                     getLocalIdent: getCSSModuleLocalIdent,
+                    exportOnlyLocals: true,
                   },
                 },
                 'sass-loader',
