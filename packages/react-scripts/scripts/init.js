@@ -192,6 +192,7 @@ module.exports = function (
   appPackage.scripts = Object.assign(
     {
       start: 'react-scripts start',
+      'start-ssr': 'react-scripts start-ssr',
       build: 'react-scripts build',
       test: 'react-scripts test',
       eject: 'react-scripts eject',

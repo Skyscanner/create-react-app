@@ -125,11 +125,11 @@ cd ../..
 # Test local build command
 yarn build
 # Check for expected output
-exists build/*.html
-exists build/static/js/*.js
-exists build/static/css/*.css
-# exists build/static/media/*.svg
-exists build/favicon.ico
+exists build/web/*.html
+exists build/web/static/js/*.js
+exists build/web/static/css/*.css
+# exists build/web/static/media/*.svg
+exists build/web/favicon.ico
 
 # Run tests with CI flag
 CI=true yarn test
@@ -162,44 +162,44 @@ function verify_env_url {
   cp package.json package.json.orig
 
   # Test default behavior
-  grep -F -R --exclude=*.map "\"/static/" build/ -q; test $? -eq 0 || exit 1
+  grep -F -R --exclude=*.map "\"/static/" build/web/ -q; test $? -eq 0 || exit 1
 
   # Test relative path build
   awk -v n=2 -v s="  \"homepage\": \".\"," 'NR == n {print s} {print}' package.json > tmp && mv tmp package.json
 
   yarn build
   # Disabled until this can be tested
-  # grep -F -R --exclude=*.map "../../static/" build/ -q; test $? -eq 0 || exit 1
-  grep -F -R --exclude=*.map "\"./static/" build/ -q; test $? -eq 0 || exit 1
-  grep -F -R --exclude=*.map "\"/static/" build/ -q; test $? -eq 1 || exit 1
+  # grep -F -R --exclude=*.map "../../static/" build/web/ -q; test $? -eq 0 || exit 1
+  grep -F -R --exclude=*.map "\"./static/" build/web/ -q; test $? -eq 0 || exit 1
+  grep -F -R --exclude=*.map "\"/static/" build/web/ -q; test $? -eq 1 || exit 1
 
   PUBLIC_URL="/anabsolute" yarn build
-  grep -F -R --exclude=*.map "/anabsolute/static/" build/ -q; test $? -eq 0 || exit 1
-  grep -F -R --exclude=*.map "\"/static/" build/ -q; test $? -eq 1 || exit 1
+  grep -F -R --exclude=*.map "/anabsolute/static/" build/web/ -q; test $? -eq 0 || exit 1
+  grep -F -R --exclude=*.map "\"/static/" build/web/ -q; test $? -eq 1 || exit 1
 
   # Test absolute path build
   sed "2s/.*/  \"homepage\": \"\/testingpath\",/" package.json > tmp && mv tmp package.json
 
   yarn build
-  grep -F -R --exclude=*.map "/testingpath/static/" build/ -q; test $? -eq 0 || exit 1
-  grep -F -R --exclude=*.map "\"/static/" build/ -q; test $? -eq 1 || exit 1
+  grep -F -R --exclude=*.map "/testingpath/static/" build/web/ -q; test $? -eq 0 || exit 1
+  grep -F -R --exclude=*.map "\"/static/" build/web/ -q; test $? -eq 1 || exit 1
 
   PUBLIC_URL="https://www.example.net/overridetest" yarn build
-  grep -F -R --exclude=*.map "https://www.example.net/overridetest/static/" build/ -q; test $? -eq 0 || exit 1
-  grep -F -R --exclude=*.map "\"/static/" build/ -q; test $? -eq 1 || exit 1
-  grep -F -R --exclude=*.map "testingpath/static" build/ -q; test $? -eq 1 || exit 1
+  grep -F -R --exclude=*.map "https://www.example.net/overridetest/static/" build/web/ -q; test $? -eq 0 || exit 1
+  grep -F -R --exclude=*.map "\"/static/" build/web/ -q; test $? -eq 1 || exit 1
+  grep -F -R --exclude=*.map "testingpath/static" build/web/ -q; test $? -eq 1 || exit 1
 
   # Test absolute url build
   sed "2s/.*/  \"homepage\": \"https:\/\/www.example.net\/testingpath\",/" package.json > tmp && mv tmp package.json
 
   yarn build
-  grep -F -R --exclude=*.map "/testingpath/static/" build/ -q; test $? -eq 0 || exit 1
-  grep -F -R --exclude=*.map "\"/static/" build/ -q; test $? -eq 1 || exit 1
+  grep -F -R --exclude=*.map "/testingpath/static/" build/web/ -q; test $? -eq 0 || exit 1
+  grep -F -R --exclude=*.map "\"/static/" build/web/ -q; test $? -eq 1 || exit 1
 
   PUBLIC_URL="https://www.example.net/overridetest" yarn build
-  grep -F -R --exclude=*.map "https://www.example.net/overridetest/static/" build/ -q; test $? -eq 0 || exit 1
-  grep -F -R --exclude=*.map "\"/static/" build/ -q; test $? -eq 1 || exit 1
-  grep -F -R --exclude=*.map "testingpath/static" build/ -q; test $? -eq 1 || exit 1
+  grep -F -R --exclude=*.map "https://www.example.net/overridetest/static/" build/web/ -q; test $? -eq 0 || exit 1
+  grep -F -R --exclude=*.map "\"/static/" build/web/ -q; test $? -eq 1 || exit 1
+  grep -F -R --exclude=*.map "testingpath/static" build/web/ -q; test $? -eq 1 || exit 1
 
   # Restore package.json
   rm package.json
@@ -233,11 +233,11 @@ cd test-app
 # Test the build
 yarn build
 # Check for expected output
-exists build/*.html
-exists build/static/js/*.js
-exists build/static/css/*.css
-# exists build/static/media/*.svg
-exists build/favicon.ico
+exists build/web/*.html
+exists build/web/static/js/*.js
+exists build/web/static/css/*.css
+# exists build/web/static/media/*.svg
+exists build/web/favicon.ico
 
 # Run tests with CI flag
 CI=true yarn test
@@ -269,11 +269,11 @@ verify_module_scope
 # # Test the build
 # yarn build
 # # Check for expected output
-# exists build/*.html
-# exists build/static/js/*.js
-# exists build/static/css/*.css
-# # exists build/static/media/*.svg
-# exists build/favicon.ico
+# exists build/web/*.html
+# exists build/web/static/js/*.js
+# exists build/web/static/css/*.css
+# # exists build/web/static/media/*.svg
+# exists build/web/favicon.ico
 
 # # Run tests, overriding the watch option to disable it.
 # # `CI=true yarn test` won't work here because `yarn test` becomes just `jest`.

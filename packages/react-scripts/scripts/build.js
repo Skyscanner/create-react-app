@@ -79,12 +79,12 @@ checkBrowsers(paths.appPath, isInteractive)
   .then(() => {
     // First, read the current file sizes in build directory.
     // This lets us display how much they changed later.
-    return measureFileSizesBeforeBuild(paths.appBuild);
+    return measureFileSizesBeforeBuild(paths.appBuildWeb);
   })
   .then(previousFileSizes => {
     // Remove all content but keep the directory so that
     // if you're in it, you don't end up in Trash
-    fs.emptyDirSync(paths.appBuild);
+    fs.emptyDirSync(paths.appBuildWeb);
     // Merge with the public folder
     copyPublicFolder();
     // Start the webpack build
@@ -103,8 +103,8 @@ checkBrowsers(paths.appPath, isInteractive)
       // The SSR config still omits a css file - it's not yet possible to omit
       // file output in ExtractTextPlugin. This is not needed so lets clean
       // it up to avoid confusion.
-      const ssrCssPath = path.join(paths.appBuild, 'ssr.css');
-      const ssrCssMapPath = path.join(paths.appBuild, 'ssr.css.map');
+      const ssrCssPath = path.join(paths.appBuildSsr, 'ssr.css');
+      const ssrCssMapPath = path.join(paths.appBuildSsr, 'ssr.css.map');
       if (fs.existsSync(ssrCssPath)) {
         fs.unlinkSync(ssrCssPath);
       }
@@ -133,7 +133,7 @@ checkBrowsers(paths.appPath, isInteractive)
       printFileSizesAfterBuild(
         stats,
         previousFileSizes,
-        paths.appBuild,
+        paths.appBuildWeb,
         WARN_AFTER_BUNDLE_GZIP_SIZE,
         WARN_AFTER_CHUNK_GZIP_SIZE
       );
@@ -142,7 +142,7 @@ checkBrowsers(paths.appPath, isInteractive)
       const appPackage = require(paths.appPackageJson);
       const publicUrl = paths.publicUrlOrPath;
       const publicPath = config.output.publicPath;
-      const buildFolder = path.relative(process.cwd(), paths.appBuild);
+      const buildFolder = path.relative(process.cwd(), paths.appBuildWeb);
       printHostingInstructions(
         appPackage,
         publicUrl,
@@ -254,7 +254,7 @@ function build(previousFileSizes) {
 }
 
 function copyPublicFolder() {
-  fs.copySync(paths.appPublic, paths.appBuild, {
+  fs.copySync(paths.appPublic, paths.appBuildWeb, {
     dereference: true,
     filter: file => file !== paths.appHtml,
   });

@@ -55,6 +55,8 @@ const jsWorkerPool = {
 
 const appPackageJson = require(paths.appPackageJson);
 
+const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
+const LoadablePlugin = require('@loadable/webpack-plugin');
 const sassFunctions = require('bpk-mixins/sass-functions');
 const camelCase = require('lodash/camelCase');
 const bpkReactScriptsConfig = appPackageJson['backpack-react-scripts'] || {};
@@ -85,6 +87,11 @@ const shouldInlineRuntimeChunk = process.env.INLINE_RUNTIME_CHUNK !== 'false';
 // Disabling as they are not currently used in the code see L874
 // const emitErrorsAsWarnings = process.env.ESLINT_NO_DEV_ERRORS === 'true';
 // const disableESLintPlugin = process.env.DISABLE_ESLINT_PLUGIN === 'true';
+
+// We might not want to use the hard source plugin on environments that won't persist the cache for later
+const useHardSourceWebpackPlugin =
+  process.env.USE_HARD_SOURCE_WEBPACK_PLUGIN === 'true';
+const environmentHash = require('./environmentHash');
 
 const imageInlineSizeLimit = parseInt(
   process.env.IMAGE_INLINE_SIZE_LIMIT || '10000'
@@ -253,7 +260,7 @@ module.exports = function (webpackEnv) {
     output: {
       crossOriginLoading: sriEnabled ? 'anonymous' : crossOriginLoading,
       // The build folder.
-      path: isEnvProduction ? paths.appBuild : undefined,
+      path: paths.appBuildWeb,
       // Add /* filename */ comments to generated require()s in the output.
       pathinfo: isEnvDevelopment,
       // There will be one main bundle, and one file per asynchronous chunk.
@@ -278,7 +285,8 @@ module.exports = function (webpackEnv) {
               .relative(paths.appSrc, info.absoluteResourcePath)
               .replace(/\\/g, '/')
         : isEnvDevelopment &&
-          (info => path.resolve(info.absoluteResourcePath).replace(/\\/g, '/')),
+          (info =>
+            path.resolve(info.absoluteResourcePath).replace(/\\/g, '/')),
       // Prevents conflicts when multiple webpack runtimes (from different apps)
       // are used on the same page.
       // jsonpFunction: `webpackJsonp${appPackageJson.name}`,
@@ -435,6 +443,7 @@ module.exports = function (webpackEnv) {
       ],
     },
     module: {
+      noParse: /iconv-loader\.js$/, // https://github.com/webpack/webpack/issues/3078#issuecomment-400697407
       strictExportPresence: true,
       rules: [
         // Disable require.ensure as it's not a standard language feature.
@@ -521,6 +530,7 @@ module.exports = function (webpackEnv) {
                 ),
                 // @remove-on-eject-end
                 plugins: [
+                  require.resolve('@loadable/babel-plugin'),
                   [
                     require.resolve('babel-plugin-named-asset-import'),
                     {
@@ -811,6 +821,20 @@ module.exports = function (webpackEnv) {
       ],
     },
     plugins: [
+      useHardSourceWebpackPlugin &&
+        new HardSourceWebpackPlugin({ environmentHash }),
+      useHardSourceWebpackPlugin &&
+        new HardSourceWebpackPlugin.ExcludeModulePlugin([
+          {
+            // HardSource works with mini-css-extract-plugin but due to how
+            // mini-css emits assets, assets are not emitted on repeated builds with
+            // mini-css and hard-source together. Ignoring the mini-css loader
+            // modules, but not the other css loader modules, excludes the modules
+            // that mini-css needs rebuilt to output assets every time.
+            test: /mini-css-extract-plugin[\\/]dist[\\/]loader/,
+          },
+        ]),
+      new LoadablePlugin(),
       // Generates an `index.html` file with the <script> injected.
       new HtmlWebpackPlugin(
         Object.assign(
@@ -877,7 +901,10 @@ module.exports = function (webpackEnv) {
       // It is absolutely essential that NODE_ENV is set to production
       // during a production build.
       // Otherwise React will be compiled in the very slow development mode.
-      new webpack.DefinePlugin(env.stringified),
+      new webpack.DefinePlugin({
+        ...env.stringified,
+        'typeof window': '"object"',
+      }),
       // This is necessary to emit hot updates (CSS and Fast Refresh):
       isEnvDevelopment && new webpack.HotModuleReplacementPlugin(),
       // Experimental hot reloading for React .
@@ -928,7 +955,7 @@ module.exports = function (webpackEnv) {
             return manifest;
           }, seed);
           const entrypointFiles = entrypoints.main.filter(
-            fileName => !fileName.endsWith('.map')
+            (fileName) => !fileName.endsWith('.map')
           );
 
           return {
