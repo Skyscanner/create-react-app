@@ -18,6 +18,18 @@
 
 - Updated webpack paths to include the new `@skyscanner/bpk` foundations packages.
 
+## (Pending)
+
+- Added `ignoreCssWarnings` config item to allow the ability to supress CSS ordering issues when its safe to allow mixed order when it has not effect on output. https://github.com/webpack-contrib/mini-css-extract-plugin#remove-order-warnings
+
+## 9.1.3
+
+- Fixed an issue where webpack paths in SSR were not being utilised.
+
+## 9.1.2
+
+- Updated webpack paths to include the new `@skyscanner/bpk` foundations packages.
+
 ## 9.1.1
 
 - Optimize the usage of `thread-loader` to fix `build:storybook` running failed
